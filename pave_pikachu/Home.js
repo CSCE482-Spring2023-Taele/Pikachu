@@ -13,6 +13,10 @@ import {
 	TouchableOpacity,
 	useColorScheme,
 	View,
+    Dimensions,
+    TextInput,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 
 import {
@@ -25,6 +29,11 @@ import {
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import AccessibilityEntrances from './ada';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+let deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
 
@@ -59,8 +68,22 @@ export default function HomeScreen({navigation, route}) {
 	}
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.page}>
                     <View style={styles.container}>
+                    <View style={[styles.inputsContainer, {flex:0.1, }]}>
+                    <View style={styles.inputBox}>
+                    <Icon name = "map-marker" style={{fontSize: 25, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
+                    <TextInput
+                        autoCorrect={false}
+                        secureTextEntry={false}
+                        style={{flex: 1, fontFamily: 'lucida grande', fontSize: 20}}
+                        placeholder = "Search"
+                        placeholderTextColor="#9F9F9F"
+                    />
+                    </View>
+                </View>
+
                         <MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/mapbox/streets-v12"} onRegionDidChange={getBoundingBox}>
                             <MapLibreGL.Camera
                                 zoomLevel={16}
@@ -84,6 +107,7 @@ export default function HomeScreen({navigation, route}) {
                         </MapLibreGL.MapView>
                     </View>
                 </View>
+                </TouchableWithoutFeedback>
     );
 }
   
@@ -92,6 +116,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+        backgroundColor: "#C8D5B9"
 	},
 	container: {
 		flex: 1, 
@@ -99,7 +124,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	map: {
-		flex: 1
+		flex: 1,
 	},
 	small: {
 		backgroundColor: 'blue',
@@ -107,5 +132,22 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		width: 10,
 		flex: 1,
-	}
+	},
+    inputsContainer: {
+        zIndex: 3,
+    },
+    inputBox: {
+   
+        width: 350,
+        height: (deviceHeight/100)*6,
+        borderRadius: 22,
+        backgroundColor: '#d6e0cb',
+        textAlign: 'left',
+        textAlignVertical: 'center',
+        flexDirection: 'row',
+        fontFamily: '',
+        marginLeft: 30,
+        marginTop: 10,
+  
+      }
 });
