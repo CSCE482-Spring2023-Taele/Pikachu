@@ -46,7 +46,6 @@ export default function HomeScreen({navigation, route}) {
     const [path, setPath] = useState([]);
 
 	useEffect(() => {
-		console.log("hi1")
 		let accessibilityEntrances = []
 		// AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
 		//   features.forEach((entrance: { geometry: any; }) => {
@@ -70,32 +69,27 @@ export default function HomeScreen({navigation, route}) {
                 console.log("right here", destinationCoord);
 			}).catch(err => console.log(err));
         }
-
-        console.log("path: ", path);
         console.log("destination: ", destinationCoord);
     	
 	}, [destinationCoord])
 
-    const getBoundingBox = (feature) => {
-		const bounds = feature.properties.visibleBounds;
-		const topRight = bounds[0];
-		const bottomLeft = bounds[1];
-		console.log("bounds", bounds)
-	}
+    // const getBoundingBox = (feature) => {
+	// 	const bounds = feature.properties.visibleBounds;
+	// 	const topRight = bounds[0];
+	// 	const bottomLeft = bounds[1];
+	// 	console.log("bounds", bounds)
+	// }
 
     const getSpot = (feature) => {
         console.log("click: ", feature.geometry.coordinates);
         setDestinationCoord(feature.geometry.coordinates);
         console.log("destination coord: ", destinationCoord);
 
-
-
         GetRoute(-96.34156349159862,30.617461341278755,		// start lat, start long
 			 destinationCoord[0], destinationCoord[1], token)		// end lat, end long, token
 			.then(resp => resp.features)
 			.then(features => {
 				setPath(features[0].geometry.coordinates)
-                console.log("right here", destinationCoord);
 			}).catch(err => console.log(err));
     }
 
