@@ -28,7 +28,7 @@ import {
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import AccessibilityEntrances from './ada';
-import GetRoute from './route';
+
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -49,12 +49,12 @@ import RegisterSuccessScreen from './RegisterSuccess.js'
 const Tab = createBottomTabNavigator();
 
 function MyTabs({navigation, route}) {
-//   const temp = route.params.token;
+  const temp = route.params.token;
 
   return (
     <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
       
-      <Tab.Screen name="Settings" component={SettingsScreen}  options={{
+      <Tab.Screen name="Settings" component={SettingsScreen} initialParams={{token: temp}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
@@ -62,7 +62,7 @@ function MyTabs({navigation, route}) {
               );},
             tabBarShowLabel: false,
             }}/>
-      <Tab.Screen name="Home" component={HomeScreen}  options={{
+      <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
@@ -71,7 +71,7 @@ function MyTabs({navigation, route}) {
             tabBarShowLabel: false,
             }}/>
 
-      <Tab.Screen name="Profile" component={ProfileScreen}  options={{
+      <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{token: temp}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (

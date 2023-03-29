@@ -7,7 +7,7 @@ const GetRoute = async (startLat, startLong,
 
 	let reqHeader = new Headers();
 	// hardcoded token
-	reqHeader.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY3OTk0MjE4MywiZXhwIjoxNjc5OTYwMTgzfQ.J2vUt6uhgaeh1i4st0ICq0p5FFe6pNl1f9wris0eF3c");
+	reqHeader.append("Authorization", "Bearer " + token);
 	reqHeader.append('Content-Type', 'application/json');
 	
 	// let data = {
@@ -30,7 +30,6 @@ const GetRoute = async (startLat, startLong,
 			return result;
 		})
 		.then(async (promise) => {
-			console.log("promise", promise)
 			promise.map(obstruction => {
 				const lat = parseFloat(obstruction.latitude);
 				const long = parseFloat(obstruction.longitude);
@@ -42,7 +41,7 @@ const GetRoute = async (startLat, startLong,
 			return promise;
 		})
 		.catch(function(err) {
-			console.log("error!!!!!", err);
+			console.log("error1!!!!!", err);
 		});
 	
 	
@@ -73,10 +72,12 @@ const GetRoute = async (startLat, startLong,
 			return result;
 		})
 		.then(async (promise) => {
+			console.log("promise", promise)
+
 			return promise;
 		})
 		.catch(function(err) {
-			console.log("error!!!!!", err);
+			console.log("error2!!!!!", err);
 		});
 	return resData;
 }
