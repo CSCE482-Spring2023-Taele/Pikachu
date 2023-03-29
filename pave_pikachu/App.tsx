@@ -28,6 +28,7 @@ import {
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import AccessibilityEntrances from './ada';
+import GetRoute from './route';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -85,62 +86,6 @@ function MyTabs({navigation, route}) {
 const Stack = createStackNavigator();
 
 const App = () => {
-	
-	// const [accessibilityEntrances, setAccessibilityEntrances] = useState([]);
-	// useEffect(() => {
-	// 	console.log("hi1")
-	// 	let accessibilityEntrances = []
-	// 	AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
-	// 	  features.forEach((entrance: { geometry: any; }) => {
-	// 	    accessibilityEntrances.push(entrance.geometry)
-	// 	  });
-	// 	  console.log("length1", accessibilityEntrances.length)
-	// 	}).catch(err => console.log(err));
-
-	// 	AccessibilityEntrances(1000,1522).then(resp => resp.features).then(features => {
-	// 		features.forEach((entrance: { geometry: any; }) => {
-	// 			accessibilityEntrances.push(entrance.geometry)
-	// 		});
-	// 		console.log("length2", accessibilityEntrances.length)
-	// 		setAccessibilityEntrances(accessibilityEntrances)
-	// 	}).catch(err => console.log(err));
-	// }, [])
-
-	// const getBoundingBox = (feature) => {
-	// 	const bounds = feature.properties.visibleBounds;
-	// 	const topRight = bounds[0];
-	// 	const bottomLeft = bounds[1];
-	// 	console.log("bounds", bounds)
-	// }
-
-	// return (
-	// 	<View style={styles.page}>
-	// 		<View style={styles.container}>
-	// 			<MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/mapbox/streets-v12"} onRegionDidChange={getBoundingBox}>
-	// 				<MapLibreGL.Camera
-	// 					zoomLevel={16}
-	// 					centerCoordinate={[-96.3365, 30.6187]}
-	// 				/>
-	// 				{accessibilityEntrances.map((p, i) => {
-	// 					return (
-	// 						<MapLibreGL.PointAnnotation
-	// 							key={`square-${i}`}
-	// 							id={`square-${i}`}
-	// 							coordinate={[p.x, p.y]}
-	// 							anchor={{x: 0, y: 0}}
-	// 							onSelected={() => console.log("here", i)}
-	// 							onDeselected={() => console.log("here2", i)} >
-	// 								<View style={styles.small}>
-	// 								</View>
-	// 						</MapLibreGL.PointAnnotation>
-	// 					)
-	// 				}
-	// 			)} 
-	// 			</MapLibreGL.MapView>
-	// 		</View>
-	// 	</View>
-	// );
-
 	return (
 		<NavigationContainer>
 		  <Stack.Navigator initialRouteName={'Login'} screenOptions={{headerShown: false}}>
@@ -178,5 +123,25 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		width: 10,
 		flex: 1,
-	}
+	},
+  	test: {
+		backgroundColor: 'yellow',
+		height: 15,
+		justifyContent: 'center',
+		width: 15,
+		flex: 1,
+	},
+  	obstruction: {
+		backgroundColor: 'red',
+		height: 15,
+		justifyContent: 'center',
+		width: 15,
+		flex: 1,
+	},
+	lineLayer: {
+		lineColor: 'green',
+		lineCap: 'round',
+		lineJoin: 'round',
+		lineWidth: 14
+	},
 });
