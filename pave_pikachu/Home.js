@@ -41,17 +41,19 @@ export default function HomeScreen({navigation, route}) {
     // const token = route.params.token;
 
     const [accessibilityEntrances, setAccessibilityEntrances] = useState([]);
+    const [destinationCoord, setDestinationCoord] = useState([]);
+
     useEffect(() => {
 		console.log("hi1")
 		let accessibilityEntrances = []
-		AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
-		  features.forEach((entrance: { geometry: any; }) => {
-		    accessibilityEntrances.push(entrance.geometry)
-		  });
-		  console.log("length1", accessibilityEntrances.length)
-		}).catch(err => console.log(err));
+		// AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
+		//   features.forEach((entrance: { geometry: any; }) => {
+		//     accessibilityEntrances.push(entrance.geometry)
+		//   });
+		//   console.log("length1", accessibilityEntrances.length)
+		// }).catch(err => console.log(err));
 
-		AccessibilityEntrances(1000,1522).then(resp => resp.features).then(features => {
+		AccessibilityEntrances(1000,10).then(resp => resp.features).then(features => {
 			features.forEach((entrance: { geometry: any; }) => {
 				accessibilityEntrances.push(entrance.geometry)
 			});
@@ -67,24 +69,21 @@ export default function HomeScreen({navigation, route}) {
 		console.log("bounds", bounds)
 	}
 
-    return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.page}>
-                    <View style={styles.container}>
-                    <View style={[styles.inputsContainer, {flex:0.1, }]}>
-                    <View style={styles.inputBox}>
-                    <Icon name = "map-marker" style={{fontSize: 25, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
-                    <TextInput
-                        autoCorrect={false}
-                        secureTextEntry={false}
-                        style={{flex: 1, fontFamily: 'lucida grande', fontSize: 20}}
-                        placeholder = "Search"
-                        placeholderTextColor="#9F9F9F"
-                    />
-                    </View>
-                </View>
+    const getSpot = (feature) => {
+        console.log("click: ", feature.geometry.coordinates);
+        setDestinationCoord(feature.geometry.coordinates);
 
-                        <MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/mapbox/streets-v12"} onRegionDidChange={getBoundingBox}>
+
+    }
+
+    return (
+        
+        <View style={styles.page}>
+
+                        <MapLibreGL.MapView style={styles.map} 
+                        styleURL={"mapbox://styles/mapbox/streets-v12"} 
+                        onRegionDidChange={getBoundingBox}
+                        onPress={getSpot}>
                             <MapLibreGL.Camera
                                 zoomLevel={16}
                                 centerCoordinate={[-96.3365, 30.6187]}
@@ -107,7 +106,7 @@ export default function HomeScreen({navigation, route}) {
                         </MapLibreGL.MapView>
                     </View>
                 </View>
-                </TouchableWithoutFeedback>
+         
     );
 }
   
