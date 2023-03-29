@@ -53,15 +53,6 @@ function MyTabs({navigation, route}) {
 
   return (
     <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
-      
-      <Tab.Screen name="Settings" component={SettingsScreen} initialParams={{token: temp}} options={{
-            headerShown: false,
-            tabBarIcon:  ({color}) => {
-              return (
-                <Icon name = "flag" style={{fontSize: 25}}/>
-              );},
-            tabBarShowLabel: false,
-            }}/>
       <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
