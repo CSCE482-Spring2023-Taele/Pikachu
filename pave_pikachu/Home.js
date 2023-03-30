@@ -41,36 +41,20 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 export default function HomeScreen({navigation, route}) {
     const token = route.params.token;
 
-	const [accessibilityEntrances, setAccessibilityEntrances] = useState([]);
     const [destinationCoord, setDestinationCoord] = useState([]);
     const [path, setPath] = useState([]);
 
 	useEffect(() => {
-		let accessibilityEntrances = []
-		// AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
-		//   features.forEach((entrance: { geometry: any; }) => {
-		//     accessibilityEntrances.push(entrance.geometry)
-		//   });
-		// }).catch(err => console.log(err));
-
-		AccessibilityEntrances(1000,22).then(resp => resp.features).then(features => {
-			features.forEach((entrance: { geometry: any; }) => {
-				accessibilityEntrances.push(entrance.geometry)
-			});
-			setAccessibilityEntrances(accessibilityEntrances)
-		}).catch(err => console.log(err));
-
         if (destinationCoord.length > 0) {
             GetRoute(-96.34156349159862,30.617461341278755,		// start lat, start long
-			 destinationCoord[0], destinationCoord[1], token)		// end lat, end long, token
+					 destinationCoord[0], destinationCoord[1], token)		// end lat, end long, token
 			.then(resp => resp.features)
 			.then(features => {
 				setPath(features[0].geometry.coordinates)
                 console.log("right here", destinationCoord);
 			}).catch(err => console.log(err));
         }
-        console.log("destination: ", destinationCoord);
-    	
+        console.log("destination: ", destinationCoord);    	
 	}, [destinationCoord])
 
     // const getBoundingBox = (feature) => {
@@ -96,7 +80,7 @@ export default function HomeScreen({navigation, route}) {
     return (
 		<View style={styles.page}>
 			<View style={styles.container}>
-				<MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/mapbox/streets-v12"} onPress={getSpot}>
+				<MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/potato797/clfvkdirb000701ryajzh870m"} onPress={getSpot}>
 					<MapLibreGL.Camera
 						zoomLevel={16}
 						centerCoordinate={[-96.3365, 30.6187]}
@@ -149,21 +133,6 @@ export default function HomeScreen({navigation, route}) {
 						<View style={styles.test}>
 						</View>
 					</MapLibreGL.PointAnnotation>
-					{accessibilityEntrances.map((p, i) => {
-						return (
-							<MapLibreGL.PointAnnotation
-								key={`square-${i}`}
-								id={`square-${i}`}
-								coordinate={[p.x, p.y]}
-								anchor={{x: 0, y: 0}}
-								onSelected={() => console.log("here", i)}
-								onDeselected={() => console.log("here2", i)} >
-									<View style={styles.small}>
-									</View>
-							</MapLibreGL.PointAnnotation>
-						)
-					}
-				)} 
 				</MapLibreGL.MapView>
 			</View>
 		</View>

@@ -6,16 +6,8 @@ const GetRoute = async (startLat, startLong,
 	
 
 	let reqHeader = new Headers();
-	// hardcoded token
 	reqHeader.append("Authorization", "Bearer " + token);
 	reqHeader.append('Content-Type', 'application/json');
-	
-	// let data = {
-	// 	bottomLeftLat: bottomLeftLat,
-	// 	bottomLeftLong: bottomLeftLong,
-	// 	topRightLat: topRightLat,
-	// 	topRightLong: topRightLong
-	// };
 	
 	let options = {
 		method: 'GET', headers: reqHeader
@@ -45,7 +37,6 @@ const GetRoute = async (startLat, startLong,
 		});
 	
 	
-	// reqHeader.append("Authorization", "5b3ce359785c1110001cf6248f834231758eb4b809ded56df20155e98");
 	reqHeader.delete("Authorization");
 	reqHeader.append('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
 	reqHeader.append("Authorization", "5b3ce3597851110001cf6248f834231758eb4b809ded56df20155e98");
@@ -72,8 +63,6 @@ const GetRoute = async (startLat, startLong,
 			return result;
 		})
 		.then(async (promise) => {
-			console.log("promise", promise)
-
 			return promise;
 		})
 		.catch(function(err) {
