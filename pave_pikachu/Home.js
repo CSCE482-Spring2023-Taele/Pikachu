@@ -16,7 +16,8 @@ import {
     Dimensions,
     TextInput,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+	PermissionsAndroid
 } from 'react-native';
 
 import {
@@ -33,6 +34,8 @@ import GetRoute from './route';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import Geolocation from '@react-native-community/geolocation'; // for location
+
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
@@ -41,11 +44,104 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 export default function HomeScreen({navigation, route}) {
     const token = route.params.token;
 
+	const [currentLongitude, setCurrentLongitude] = useState(30.61);
+	const [currentLatitude, setCurrentLatitude] = useState(-96.3359);
+	const [locationStatus, setLocationStatus ] = useState('');
+
+	useEffect(() =>{
+		const requestLocationPermission = async () => {
+			try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+				{
+				title: 'Location Access Required',
+				message: 'This App needs to Access your location',
+				},
+			);
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+				//To Check, If Permission is granted
+				getOneTimeLocation();
+				subscribeLocationLocation();
+			} else {
+				setLocationStatus('Permission Denied');
+			}
+			} catch (err) {
+			console.warn(err);
+			}
+		}
+		requestLocationPermission();
+		return () => {
+			Geolocation.clearWatch(watchID);
+		};
+	}, []);
+
+	const getOneTimeLocation = () => {
+		setLocationStatus('Getting Location ...');
+		Geolocation.getCurrentPosition(
+		  //Will give you the current location
+		  (position) => {
+			setLocationStatus('You are Here');
+	
+			//getting the Longitude from the location json
+			const currentLongitude = position.coords.longitude;
+	
+			//getting the Latitude from the location json
+			const currentLatitude = position.coords.latitude;
+	
+			//Setting Longitude state
+			setCurrentLongitude(currentLongitude);
+			
+			//Setting Longitude state
+			setCurrentLatitude(currentLatitude);
+		  },
+		  (error) => {
+			setLocationStatus(error.message);
+		  },
+		  {
+			enableHighAccuracy: true,
+			timeout: 30000,
+			maximumAge: 1000
+		  },
+		);
+	  };
+	
+	const subscribeLocationLocation = () => {
+	watchID = Geolocation.watchPosition(
+		(position) => {
+		//Will give you the location on location change
+		
+		setLocationStatus('You are Here');
+		console.log(position);
+
+		//getting the Longitude from the location json        
+		const currentLongitude = position.coords.longitude;
+
+		//getting the Latitude from the location json
+		const currentLatitude = position.coords.latitude;
+
+		//Setting Longitude state
+		setCurrentLongitude(currentLongitude);
+
+		//Setting Latitude state
+		setCurrentLatitude(currentLatitude);
+		},
+		(error) => {
+		setLocationStatus(error.message);
+		},
+		{
+		enableHighAccuracy: true,
+		maximumAge: 1000
+		},
+	);
+	};
+	console.log(currentLatitude, currentLongitude)
+
 	const [accessibilityEntrances, setAccessibilityEntrances] = useState([]);
     const [destinationCoord, setDestinationCoord] = useState([]);
     const [path, setPath] = useState([]);
 
 	useEffect(() => {
+		
 		console.log("hi1")
 		let accessibilityEntrances = []
 		// AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
@@ -62,7 +158,7 @@ export default function HomeScreen({navigation, route}) {
 		}).catch(err => console.log(err));
 
         if (destinationCoord.length > 0) {
-            GetRoute(-96.34156349159862,30.617461341278755,		// start lat, start long
+            GetRoute(currentLatitude, currentLongitude,		// start lat, start long
 			 destinationCoord[0], destinationCoord[1], token)		// end lat, end long, token
 			.then(resp => resp.features)
 			.then(features => {
@@ -74,7 +170,7 @@ export default function HomeScreen({navigation, route}) {
         console.log("path: ", path);
         console.log("destination: ", destinationCoord);
     	
-	}, [destinationCoord])
+	}, [destinationCoord]);
 
     const getBoundingBox = (feature) => {
 		const bounds = feature.properties.visibleBounds;
@@ -90,7 +186,7 @@ export default function HomeScreen({navigation, route}) {
 
 
 
-        GetRoute(-96.34156349159862,30.617461341278755,		// start lat, start long
+        GetRoute(currentLatitude,currentLongitude,		// start lat, start long
 			 destinationCoord[0], destinationCoord[1], token)		// end lat, end long, token
 			.then(resp => resp.features)
 			.then(features => {
@@ -99,13 +195,13 @@ export default function HomeScreen({navigation, route}) {
 			}).catch(err => console.log(err));
     }
 
-    return (
+	return (
 		<View style={styles.page}>
 			<View style={styles.container}>
 				<MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/mapbox/streets-v12"} onPress={getSpot}>
 					<MapLibreGL.Camera
 						zoomLevel={16}
-						centerCoordinate={[-96.3365, 30.6187]}
+						centerCoordinate={[currentLongitude, currentLatitude]}
 					/>
 					{
 						path.length > 0 &&
