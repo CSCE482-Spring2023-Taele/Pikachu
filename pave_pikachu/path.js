@@ -1,32 +1,21 @@
 import buffer from "@turf/buffer";
 import { point } from "@turf/helpers";
 
-const GetRoute = async (startLat, startLong, 
-						endLat, endLong, token) => {
-	
-
-	let reqHeader = new Headers();
-	// hardcoded token
+const GetObstructions = async (token) => {
+	const reqHeader = new Headers();
 	reqHeader.append("Authorization", "Bearer " + token);
 	reqHeader.append('Content-Type', 'application/json');
 	
-	// let data = {
-	// 	bottomLeftLat: bottomLeftLat,
-	// 	bottomLeftLong: bottomLeftLong,
-	// 	topRightLat: topRightLat,
-	// 	topRightLong: topRightLong
-	// };
-	
-	let options = {
+	const options = {
 		method: 'GET', headers: reqHeader
 	};
 	
 	let polygons = [];
 	const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev/all-obstructions";
-	let resData = await fetch(url, options)
+	const resData = await fetch(url, options)
 		.then(response => {
 			console.log("url", url);
-			let result = response.json();
+			const result = response.json();
 			return result;
 		})
 		.then(async (promise) => {
@@ -34,22 +23,31 @@ const GetRoute = async (startLat, startLong,
 				const lat = parseFloat(obstruction.latitude);
 				const long = parseFloat(obstruction.longitude);
 				const p = point([lat, long]);
-				const buffered = buffer(p, 50, {units: 'feet'});
+				const buffered = buffer(p, 20, {units: 'feet'});
 
 				polygons.push(buffered.geometry.coordinates);
 			});
-			return promise;
+			return {
+				data: promise,
+				polygons: polygons
+			};
 		})
 		.catch(function(err) {
 			console.log("error1!!!!!", err);
 		});
+
+	return resData;
+}
+
+const GetPath = async (startLat, startLong, 
+						endLat, endLong, polygons) => {
 	
-	
-	// reqHeader.append("Authorization", "5b3ce359785c1110001cf6248f834231758eb4b809ded56df20155e98");
-	reqHeader.delete("Authorization");
+	const reqHeader = new Headers();
+	reqHeader.append('Content-Type', 'application/json');
 	reqHeader.append('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
 	reqHeader.append("Authorization", "5b3ce3597851110001cf6248f834231758eb4b809ded56df20155e98");
-	data = {
+
+	const data = {
 		coordinates: [[parseFloat(startLat),parseFloat(startLong)],[parseFloat(endLat),parseFloat(endLong)]],
 		options: {
 			avoid_polygons: {
@@ -59,12 +57,12 @@ const GetRoute = async (startLat, startLong,
 		}
 	};
 
-	options = {
+	const options = {
 		method: 'POST', headers: reqHeader, body: JSON.stringify(data)
 	};
 
 	const base = "https://api.openrouteservice.org/v2/directions/foot-walking/geojson";
-	resData = await fetch(base, options)
+	const resData = await fetch(base, options)
 		.then(response => {
 			console.log("url", base);
 			let result = response.json();
@@ -72,8 +70,6 @@ const GetRoute = async (startLat, startLong,
 			return result;
 		})
 		.then(async (promise) => {
-			console.log("promise", promise)
-
 			return promise;
 		})
 		.catch(function(err) {
@@ -82,4 +78,4 @@ const GetRoute = async (startLat, startLong,
 	return resData;
 }
 
-export default GetRoute;
+export {GetObstructions, GetPath};

@@ -18,18 +18,6 @@ import {
 	View,
 } from 'react-native';
 
-import {
-	Colors,
-	DebugInstructions,
-	Header,
-	LearnMoreLinks,
-	ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import MapLibreGL from '@maplibre/maplibre-react-native';
-import { useEffect, useState } from 'react';
-import AccessibilityEntrances from './ada';
-
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -93,46 +81,3 @@ const App = () => {
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-	page: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	container: {
-		flex: 1, 
-		height: "100%",
-		width: "100%",
-	},
-	map: {
-		flex: 1
-	},
-	small: {
-		backgroundColor: 'blue',
-		height: 10,
-		justifyContent: 'center',
-		width: 10,
-		flex: 1,
-	},
-  	test: {
-		backgroundColor: 'yellow',
-		height: 15,
-		justifyContent: 'center',
-		width: 15,
-		flex: 1,
-	},
-  	obstruction: {
-		backgroundColor: 'red',
-		height: 15,
-		justifyContent: 'center',
-		width: 15,
-		flex: 1,
-	},
-	lineLayer: {
-		lineColor: 'green',
-		lineCap: 'round',
-		lineJoin: 'round',
-		lineWidth: 14
-	},
-});
