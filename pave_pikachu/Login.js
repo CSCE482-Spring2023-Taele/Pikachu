@@ -23,6 +23,7 @@ let deviceHeight = Dimensions.get('window').height;
 export default function LoginScreen({navigation}) {
     // start-google
     const [user, setUser] = useState({})
+
     useEffect(() => {
         GoogleSignin.configure({
         offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
@@ -30,12 +31,19 @@ export default function LoginScreen({navigation}) {
         });
         isSignedIn()
     }, [])
+
     const signIn = async () => {
         try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo)
-        setUser(userInfo)
+        console.log(userInfo.user)
+        setUser(userInfo.user)
+
+        let response = await attemptLogin(userInfo.user);
+        if(response.message === "user logged in") {
+            const tkn = response.token;
+            navigation.navigate("Tabs", {token: tkn});
+        }
         } catch (error) {
         console.log('Message', error.message);
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -109,46 +117,9 @@ export default function LoginScreen({navigation}) {
                     <Image source={logo} style={styles.image}/>
                 </View>
 
-                <View style={[styles.inputsContainer, {flex:0.1, }]}>
-                    <View style={styles.inputBox}>
-                    <Icon name = "account-circle" style={{fontSize: 22, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
-                    <TextInput
-                        autoCorrect={false}
-                        secureTextEntry={false}
-                        style={{flex: 1, fontFamily: 'lucida grande'}}
-                        placeholder = "E-mail"
-                        placeholderTextColor="#9F9F9F"
-                        onChangeText={newText => setEmail(newText)}
-                    />
-                    </View>
-                </View>
-
-                <View style={[styles.inputsContainer, {flex:0.1, }]}>
-                    <View style={styles.inputBox}>
-                    <Icon name = "lock" style={{fontSize: 22, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
-                    <TextInput
-                        autoCorrect={false}
-                        secureTextEntry={true}
-                        style={{flex: 1, fontFamily: 'lucida grande'}}
-                        placeholder = "Password"
-                        placeholderTextColor="#9F9F9F"
-                        onChangeText={newText => setPassword(newText)}
-                    />
-                    </View>
-                </View>
-
-                <View style={{flex: 0.25, flexDirection: 'row'}}>
-                    <TouchableOpacity onPress={() => tryLogin()} style={[styles.buttons, {marginRight: 10}]}>
-                        <Text style={{fontFamily: 'lucida grande'}}>Login</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('Register')} style={[styles.buttons, {marginLet: 10}]}>
-                        <Text style={{fontFamily: 'lucida grande'}}>Register</Text>
-                    </TouchableOpacity>
-                </View>
                 {!user.idToken ? 
                     <GoogleSigninButton 
-                    style={{ width: 192, height: 48 }}
+                    style={{ width: 192, height: 48, }}
                     size={GoogleSigninButton.Size.Wide}
                     color={GoogleSigninButton.Color.Dark}
                     onPress={signIn}

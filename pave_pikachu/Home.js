@@ -36,8 +36,8 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 export default function HomeScreen({navigation, route}) {
 	const token = route.params.token;
 
-	const [currentLongitude, setCurrentLongitude] = useState(30.61);
-	const [currentLatitude, setCurrentLatitude] = useState(-96.3359);
+	const [currentLongitude, setCurrentLongitude] = useState(0);
+	const [currentLatitude, setCurrentLatitude] = useState(0);
 	const [locationStatus, setLocationStatus ] = useState('');
 
 	useEffect(() =>{
@@ -127,19 +127,7 @@ export default function HomeScreen({navigation, route}) {
 	);
 	};
 
-	const [accessibilityEntrances, setAccessibilityEntrances] = useState([]);
-    const [destinationCoord, setDestinationCoord] = useState([]);
-    const [path, setPath] = useState([]);
-
-	useEffect(() => {
-		
-		console.log("hi1")
-		let accessibilityEntrances = []
-		// AccessibilityEntrances(0,1000).then(resp => resp.features).then(features => {
-		//   features.forEach((entrance: { geometry: any; }) => {
-		//     accessibilityEntrances.push(entrance.geometry)
-		//   });
-		// }).catch(err => console.log(err));
+	
 	const [destinationCoord, setDestinationCoord] = useState([]);
 	const [path, setPath] = useState([]);
 	const [obstructions, setObstructions] = useState([]);
