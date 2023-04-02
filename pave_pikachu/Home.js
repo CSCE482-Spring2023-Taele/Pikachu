@@ -156,7 +156,7 @@ export default function HomeScreen({navigation, route}) {
 
 	useEffect(() => {
 		if (destinationCoord.length > 0) {
-			GetPath(-96.34156349159862,30.617461341278755,				// user location stuff goes here
+			GetPath(currentLongitude, currentLatitude,				// user location stuff goes here
 					 destinationCoord[0], destinationCoord[1], polygons)
 			.then(resp => resp.features)
 			.then(features => {
