@@ -40,10 +40,11 @@ export default function LoginScreen({navigation}) {
         console.log(userInfo)
         setUser(userInfo)
         // user signed in and now we redirect
-        const response = await attemptLogin(userInfo); // does not return anything now
+        const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
-            navigation.navigate("Tabs", {token: userInfo.idToken});
+            navigation.navigate("Tabs", {token: response.token});
         }
+        
         } catch (error) {
         console.log('Message', error.message);
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -57,6 +58,7 @@ export default function LoginScreen({navigation}) {
         }
         }
     };
+
     const isSignedIn = async () => {
         const isSignedIn = await GoogleSignin.isSignedIn();
         console.log(userInfo)
@@ -73,7 +75,7 @@ export default function LoginScreen({navigation}) {
         // found user signed in and now we redirect
         const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
-            navigation.navigate("Tabs", {token: userInfo.idToken});
+            navigation.navigate("Tabs", {token: response.token});
         }
         } catch (error) {
         if (error.code === statusCodes.SIGN_IN_REQUIRED) {
@@ -116,9 +118,10 @@ export default function LoginScreen({navigation}) {
                     size={GoogleSigninButton.Size.Wide}
                     color={GoogleSigninButton.Color.Dark}
                     onPress={signIn}
+                    
                     /> :
                     <TouchableOpacity onPress={signOut}>
-                    <Text>Logout</Text>
+                    <Text>button</Text>
                     </TouchableOpacity>
                 }
                 {/* <StatusBar style="auto" /> */}

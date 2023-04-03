@@ -26,6 +26,7 @@ const attemptLogin = async (userinfo) => {
         .catch(function(err) {
             console.log("ERROR", err);
         });
+        console.log(resData)
     return resData;
 }
 
