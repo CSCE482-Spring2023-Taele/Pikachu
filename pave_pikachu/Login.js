@@ -108,10 +108,11 @@ export default function LoginScreen({navigation}) {
             keyboardVerticalOffset={height + 47}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[styles.container, {flex: 1,}]}>
-                <View style={{flex: 0.33, }}>
+                <View style={{flex: 0.4, }}>
                     <Image source={logo} style={styles.image}/>
                 </View>
 
+                <View style={{flex: 0.3}}>
                 {!user.idToken ? 
                     <GoogleSigninButton 
                     style={{ width: 192, height: 48, }}
@@ -120,11 +121,13 @@ export default function LoginScreen({navigation}) {
                     onPress={signIn}
                     
                     /> :
+                    
                     <TouchableOpacity onPress={signOut}>
                     <Text>button</Text>
                     </TouchableOpacity>
                 }
-                {/* <StatusBar style="auto" /> */}
+                </View>
+                
             </View>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

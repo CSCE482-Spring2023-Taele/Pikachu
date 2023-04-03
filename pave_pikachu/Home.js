@@ -178,6 +178,7 @@ export default function HomeScreen({navigation, route}) {
 		console.log("click: ", feature.geometry.coordinates);
 		setDestinationCoord(feature.geometry.coordinates);
 		console.log("destination coord: ", destinationCoord);
+        navigation.navigate("Menu", {spot: destinationCoord});
 	}
 
 	return (

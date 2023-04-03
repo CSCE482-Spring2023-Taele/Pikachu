@@ -16,7 +16,11 @@ import {
 	TouchableOpacity,
 	useColorScheme,
 	View,
+	LogBox
 } from 'react-native';
+
+LogBox.ignoreLogs(['Possible']);
+LogBox.ignoreLogs(['View']);
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -30,7 +34,8 @@ import SettingsScreen from './Settings.js';
 import ProfileScreen from './Profile.js';
 import LoginScreen from './Login.js';
 import RegisterScreen from './Register.js';
-import RegisterSuccessScreen from './RegisterSuccess.js'
+import RegisterSuccessScreen from './RegisterSuccess.js';
+import MenuScreen from './Menu.js';
 
 // MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
 
@@ -75,6 +80,7 @@ const App = () => {
 			<Stack.Screen name="Login" component={LoginScreen} />
 			<Stack.Screen name="Register" component={RegisterScreen} />
 			<Stack.Screen name="RegisterSuccess" component={RegisterSuccessScreen} />
+			<Stack.Screen name="Menu" component={MenuScreen} options={{gestureDirection: "vertical"}} />
 		  </Stack.Navigator>
 		</NavigationContainer>
 	  );
