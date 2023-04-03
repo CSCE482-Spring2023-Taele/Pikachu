@@ -55,6 +55,36 @@ const attemptRegister = async (email, firstName, lastName) => {
     return resData;
 }
 
-export {attemptLogin, attemptRegister};
+const attemptReport = async (latitude, longitude, type, description) => {
+    const data = {
+        latitude: latitude,
+        longitude: longitude,
+        type: type,
+        description: description
+    } 
+
+    let reqHeader = new Headers();
+    reqHeader.append('Content-Type', 'application/json');
+
+    let initObject = {
+        method: 'POST', headers: reqHeader, body: JSON.stringify(data)
+    };
+
+    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    let resData = await fetch(url + "/report", initObject)
+        .then(response => {
+            let result = response.json();
+            return result;
+        })
+        .then(async(promise) => {
+            return promise;
+        })
+        .catch(function(err) {
+            console.log("ERROR", err);
+        });
+    return resData;
+}
+
+export {attemptLogin, attemptRegister, attemptReport};
 
 
