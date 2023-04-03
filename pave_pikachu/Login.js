@@ -26,6 +26,7 @@ export default function LoginScreen({navigation}) {
 
     useEffect(() => {
         GoogleSignin.configure({
+        webClientId: '99909288202-frnld5j1beior6spugv29em5in4t8atg.apps.googleusercontent.com', 
         offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
         forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
         });
@@ -36,13 +37,12 @@ export default function LoginScreen({navigation}) {
         try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo.user)
-        setUser(userInfo.user)
-
-        let response = await attemptLogin(userInfo.user);
+        console.log(userInfo)
+        setUser(userInfo)
+        // user signed in and now we redirect
+        const response = await attemptLogin(userInfo); // does not return anything now
         if(response.message === "user logged in") {
-            const tkn = response.token;
-            navigation.navigate("Tabs", {token: tkn});
+            navigation.navigate("Tabs", {token: userInfo.idToken});
         }
         } catch (error) {
         console.log('Message', error.message);
@@ -59,6 +59,7 @@ export default function LoginScreen({navigation}) {
     };
     const isSignedIn = async () => {
         const isSignedIn = await GoogleSignin.isSignedIn();
+        console.log(userInfo)
         if (!!isSignedIn) {
         getCurrentUserInfo()
         } else {
@@ -69,6 +70,11 @@ export default function LoginScreen({navigation}) {
         try {
         const userInfo = await GoogleSignin.signInSilently();
         setUser(userInfo);
+        // found user signed in and now we redirect
+        const response = await attemptLogin(userInfo);
+        if(response.message === "user logged in") {
+            navigation.navigate("Tabs", {token: userInfo.idToken});
+        }
         } catch (error) {
         if (error.code === statusCodes.SIGN_IN_REQUIRED) {
             alert('User has not signed in yet');
@@ -90,19 +96,6 @@ export default function LoginScreen({navigation}) {
     };
 
     // end-google
-
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const tryLogin = async() => {
-        let response = await attemptLogin(email);
-        console.log(response.message);
-        if(response.message === "user logged in") {
-            const tkn = response.token;
-            navigation.navigate("Tabs", {token: tkn});
-        }
-    }
 
     const height = useHeaderHeight();
 
