@@ -17,7 +17,10 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     Keyboard,
-	PermissionsAndroid
+	PermissionsAndroid,
+	Modal,
+	Alert,
+	Pressable,
 } from 'react-native';
 
 import MapLibreGL from '@maplibre/maplibre-react-native';
@@ -36,6 +39,7 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 export default function HomeScreen({navigation, route}) {
 	const token = route.params.token;
 
+	const [selected, setSelected] = useState('')
 	const [currentLongitude, setCurrentLongitude] = useState(0);
 	const [currentLatitude, setCurrentLatitude] = useState(0);
 	const [locationStatus, setLocationStatus ] = useState('');
@@ -155,7 +159,7 @@ export default function HomeScreen({navigation, route}) {
 	}, []);
 
 	useEffect(() => {
-		if (destinationCoord.length > 0) {
+		if (destinationCoord.length > 0 && selected === "route") {
 			GetPath(currentLongitude, currentLatitude,				// user location stuff goes here
 					 destinationCoord[0], destinationCoord[1], polygons)
 			.then(resp => resp.features)
@@ -163,9 +167,11 @@ export default function HomeScreen({navigation, route}) {
 				setPath(features[0].geometry.coordinates);
 			})
 			.catch(err => console.log(err));
+
+			setSelected("none")
 		}
 		console.log("destination: ", destinationCoord);    	
-	}, [destinationCoord, obstructions, polygons])
+	}, [destinationCoord, obstructions, polygons, selected])
 
 	// const getBoundingBox = (feature) => {
 	// 	const bounds = feature.properties.visibleBounds;
@@ -178,8 +184,12 @@ export default function HomeScreen({navigation, route}) {
 		console.log("click: ", feature.geometry.coordinates);
 		setDestinationCoord(feature.geometry.coordinates);
 		console.log("destination coord: ", destinationCoord);
-        navigation.navigate("Menu", {lat: feature.geometry.coordinates[0], long: feature.geometry.coordinates[1], token: token});
+        //navigation.navigate("Menu", {lat: feature.geometry.coordinates[0], long: feature.geometry.coordinates[1], token: token});
+		setModalVisible(true)
+		console.log(modalVisible)
 	}
+
+	const [modalVisible, setModalVisible] = useState(false);
 
 	return (
 		<View style={styles.page}>
@@ -229,11 +239,83 @@ export default function HomeScreen({navigation, route}) {
 					</MapLibreGL.PointAnnotation>
 				</MapLibreGL.MapView>
 			</View>
+
+
+
+
+			
+			<Modal
+				animationType="slide"
+				transparent={true}
+				visible={modalVisible}
+				onRequestClose={() => {
+				Alert.alert('Modal has been closed.');
+				setModalVisible(!modalVisible);
+				}}>
+				<View style={styles.centeredView}>
+				<View style={styles.modalView}>
+					<Text style={styles.modalText}>Hello World!</Text>
+					<Pressable
+					style={[styles.button, styles.buttonClose]}
+					onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+					<Text style={styles.textStyle}>Route</Text>
+					</Pressable>
+					<Pressable
+					onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+					style={[styles.buttons, {marginRight: 10}]}>
+						<Text>Report</Text>
+					</Pressable>
+				</View>
+				</View>
+			</Modal>
+			
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 22,
+	  },
+	  modalView: {
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 35,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+		  width: 0,
+		  height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	  },
+	  button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	  },
+	  buttonOpen: {
+		backgroundColor: '#F194FF',
+	  },
+	  buttonClose: {
+		backgroundColor: '#2196F3',
+	  },
+	  textStyle: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	  },
+	  modalText: {
+		marginBottom: 15,
+		textAlign: 'center',
+	  },
+
 	page: {
 		flex: 1,
 		justifyContent: 'center',
