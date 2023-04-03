@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Dimensions, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 
@@ -13,24 +13,91 @@ import { Platform } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements'
 
+import {GoogleSignin, GoogleSigninButton, statusCodes} from '@react-native-community/google-signin';
+
 const logo = require('./assets/pave.png')
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 export default function LoginScreen({navigation}) {
+    // start-google
+    const [user, setUser] = useState({})
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    useEffect(() => {
+        GoogleSignin.configure({
+        webClientId: '99909288202-frnld5j1beior6spugv29em5in4t8atg.apps.googleusercontent.com', 
+        offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+        forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+        });
+        isSignedIn()
+    }, [])
 
-    const tryLogin = async() => {
-        let response = await attemptLogin(email);
-        console.log(response.message);
+    const signIn = async () => {
+        try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        console.log(userInfo)
+        setUser(userInfo)
+        // user signed in and now we redirect
+        const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
-            const tkn = response.token;
-            navigation.navigate("Tabs", {token: tkn});
+            navigation.navigate("Tabs", {token: response.token});
         }
-    }
+        
+        } catch (error) {
+        console.log('Message', error.message);
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            console.log('User Cancelled the Login Flow');
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+            console.log('Signing In');
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            console.log('Play Services Not Available or Outdated');
+        } else {
+            console.log('Some Other Error Happened');
+        }
+        }
+    };
+
+    const isSignedIn = async () => {
+        const isSignedIn = await GoogleSignin.isSignedIn();
+        console.log(userInfo)
+        if (!!isSignedIn) {
+        getCurrentUserInfo()
+        } else {
+        console.log('Please Login')
+        }
+    };
+    const getCurrentUserInfo = async () => {
+        try {
+        const userInfo = await GoogleSignin.signInSilently();
+        setUser(userInfo);
+        // found user signed in and now we redirect
+        const response = await attemptLogin(userInfo);
+        if(response.message === "user logged in") {
+            navigation.navigate("Tabs", {token: response.token});
+        }
+        } catch (error) {
+        if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+            alert('User has not signed in yet');
+            console.log('User has not signed in yet');
+        } else {
+            alert("Something went wrong. Unable to get user's info");
+            console.log("Something went wrong. Unable to get user's info");
+        }
+        }
+    };
+    const signOut = async () => {
+        try {
+        await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut();
+        setUser({}); // Remember to remove the user from your app's state as well
+        } catch (error) {
+        console.error(error);
+        }
+    };
+
+    // end-google
 
     const height = useHeaderHeight();
 
@@ -41,49 +108,26 @@ export default function LoginScreen({navigation}) {
             keyboardVerticalOffset={height + 47}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[styles.container, {flex: 1,}]}>
-                <View style={{flex: 0.33, }}>
+                <View style={{flex: 0.4, }}>
                     <Image source={logo} style={styles.image}/>
                 </View>
 
-                <View style={[styles.inputsContainer, {flex:0.1, }]}>
-                    <View style={styles.inputBox}>
-                    <Icon name = "account-circle" style={{fontSize: 22, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
-                    <TextInput
-                        autoCorrect={false}
-                        secureTextEntry={false}
-                        style={{flex: 1, fontFamily: 'lucida grande'}}
-                        placeholder = "E-mail"
-                        placeholderTextColor="#9F9F9F"
-                        onChangeText={newText => setEmail(newText)}
-                    />
-                    </View>
-                </View>
-
-                <View style={[styles.inputsContainer, {flex:0.1, }]}>
-                    <View style={styles.inputBox}>
-                    <Icon name = "lock" style={{fontSize: 22, marginLeft: 17, marginRight: 8, paddingTop: 13}}/>
-                    <TextInput
-                        autoCorrect={false}
-                        secureTextEntry={true}
-                        style={{flex: 1, fontFamily: 'lucida grande'}}
-                        placeholder = "Password"
-                        placeholderTextColor="#9F9F9F"
-                        onChangeText={newText => setPassword(newText)}
-                    />
-                    </View>
-                </View>
-
-                <View style={{flex: 0.25, flexDirection: 'row'}}>
-                    <TouchableOpacity onPress={() => tryLogin()} style={[styles.buttons, {marginRight: 10}]}>
-                        <Text style={{fontFamily: 'lucida grande'}}>Login</Text>
+                <View style={{flex: 0.3}}>
+                {!user.idToken ? 
+                    <GoogleSigninButton 
+                    style={{ width: 192, height: 48, }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={signIn}
+                    
+                    /> :
+                    
+                    <TouchableOpacity onPress={signOut}>
+                    <Text>button</Text>
                     </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('Register')} style={[styles.buttons, {marginLet: 10}]}>
-                        <Text style={{fontFamily: 'lucida grande'}}>Register</Text>
-                    </TouchableOpacity>
+                }
                 </View>
-
-                {/* <StatusBar style="auto" /> */}
+                
             </View>
         </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
