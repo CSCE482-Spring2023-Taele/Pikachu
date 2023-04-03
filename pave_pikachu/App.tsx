@@ -75,7 +75,7 @@ const App = () => {
 		  <Stack.Navigator initialRouteName={'Login'} screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={HomeScreen} />
 			<Stack.Screen name="Tabs" component={MyTabs} />
-			<Stack.Screen name="Settings" component={ReportScreen} />
+			<Stack.Screen name="Report" component={ReportScreen} />
 			<Stack.Screen name="Profile" component={ProfileScreen} />
 			<Stack.Screen name="Login" component={LoginScreen} />
 			<Stack.Screen name="Register" component={RegisterScreen} />

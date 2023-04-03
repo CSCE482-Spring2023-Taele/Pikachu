@@ -20,11 +20,11 @@ export default function MenuScreen({navigation, route}) {
             </View>
 
             <View style={{flex: 0.25, flexDirection: 'row', marginLeft: 90}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Settings', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginRight: 10}]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Report', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginRight: 10}]}>
                     <Text style={{fontFamily: 'lucida grande'}}>Report</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Home', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginLeft: 10}]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Tabs', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginLeft: 10}]}>
                     <Text style={{fontFamily: 'lucida grande'}}>Route</Text>
                 </TouchableOpacity>
             </View>
