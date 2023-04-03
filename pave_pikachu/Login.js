@@ -42,6 +42,7 @@ export default function LoginScreen({navigation}) {
         // user signed in and now we redirect
         const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
+            console.log("token: " + response.token);
             navigation.navigate("Tabs", {token: response.token});
         }
         

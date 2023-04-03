@@ -8,7 +8,9 @@ let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 export default function MenuScreen({navigation, route}) {
-    const temp = route.params.spot;
+    const lat = route.params.lat;
+    const long = route.params.long;
+    const token = route.params.token;
 
     return (
         <View style={{flex: 1, backgroundColor: '#C8D5B9', width: deviceWidth, padding: 30, borderTopLeftRadius: 22,borderTopRightRadius: 22, height: 600}}>
@@ -18,11 +20,11 @@ export default function MenuScreen({navigation, route}) {
             </View>
 
             <View style={{flex: 0.25, flexDirection: 'row', marginLeft: 90}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Settings', {spot: temp})} style={[styles.buttons, {marginRight: 10}]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Settings', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginRight: 10}]}>
                     <Text style={{fontFamily: 'lucida grande'}}>Report</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Home', {spot: temp})} style={[styles.buttons, {marginLeft: 10}]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Home', {lat: lat, long: long, token: token})} style={[styles.buttons, {marginLeft: 10}]}>
                     <Text style={{fontFamily: 'lucida grande'}}>Route</Text>
                 </TouchableOpacity>
             </View>

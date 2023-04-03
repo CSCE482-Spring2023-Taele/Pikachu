@@ -15,13 +15,19 @@ let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 
-export default function SettingsScreen() {
+export default function ReportScreen({navigation, route}) {
+    const lat = route.params.lat;
+    const long = route.params.long;
+    const token = route.params.token;
+
     const [description, setDescription] = useState("");
     const [reportLocation, setReportLocation] = useState("");
 
     const report = async() => {
-        let response = await attemptReport(12, 12, "puddle", description);
+        let response = await attemptReport(lat, long, "puddle", description, token);
         console.log(response.message);
+
+        navigation.navigate('Tabs', {token: token});
     }
     
     return (

@@ -60,7 +60,7 @@ const attemptRegister = async (email, firstName, lastName) => {
     return resData;
 }
 
-const attemptReport = async (latitude, longitude, type, description) => {
+const attemptReport = async (latitude, longitude, type, description, token) => {
     const data = {
         latitude: latitude,
         longitude: longitude,
@@ -70,18 +70,24 @@ const attemptReport = async (latitude, longitude, type, description) => {
 
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/json');
+    reqHeader.append("Authorization", "Bearer " + token);
 
     let initObject = {
         method: 'POST', headers: reqHeader, body: JSON.stringify(data)
     };
+    console.log("lat:" + latitude);
+    console.log("long: " + longitude);
+    console.log("token: " + token);
 
     const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
     let resData = await fetch(url + "/report", initObject)
         .then(response => {
             let result = response.json();
+            console.log("here2");
             return result;
         })
         .then(async(promise) => {
+            console.log("here3");
             return promise;
         })
         .catch(function(err) {

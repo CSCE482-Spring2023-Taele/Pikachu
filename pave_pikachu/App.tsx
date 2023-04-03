@@ -30,7 +30,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import HomeScreen from './Home.js';
-import SettingsScreen from './Settings.js';
+import ReportScreen from './Report.js';
 import ProfileScreen from './Profile.js';
 import LoginScreen from './Login.js';
 import RegisterScreen from './Register.js';
@@ -75,7 +75,7 @@ const App = () => {
 		  <Stack.Navigator initialRouteName={'Login'} screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={HomeScreen} />
 			<Stack.Screen name="Tabs" component={MyTabs} />
-			<Stack.Screen name="Settings" component={SettingsScreen} />
+			<Stack.Screen name="Settings" component={ReportScreen} />
 			<Stack.Screen name="Profile" component={ProfileScreen} />
 			<Stack.Screen name="Login" component={LoginScreen} />
 			<Stack.Screen name="Register" component={RegisterScreen} />
