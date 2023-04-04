@@ -254,16 +254,20 @@ export default function HomeScreen({navigation, route}) {
 				}}>
 				<View style={styles.centeredView}>
 				<View style={styles.modalView}>
-					<Text style={styles.modalText}>Hello World!</Text>
 					<Pressable
-					style={[styles.button, styles.buttonClose]}
+					style={[styles.button, styles.buttonClose, styles.mbottom]}
 					onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
-					<Text style={styles.textStyle}>Route</Text>
+						<Text style={styles.textStyle}>Route</Text>
 					</Pressable>
 					<Pressable
-					onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-					style={[styles.buttons, {marginRight: 10}]}>
-						<Text>Report</Text>
+					onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+					style={[styles.button, styles.buttonClose, styles.mbottom]}>
+						<Text style={styles.textStyle}>Report</Text>
+					</Pressable>
+					<Pressable
+					onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+					style={[styles.button, styles.buttonClose, styles.mbottom]}>
+						<Text style={styles.textStyle}>Favorite</Text>
 					</Pressable>
 				</View>
 				</View>
@@ -299,6 +303,9 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
+	  },
+	  mbottom: {
+		marginBottom: 3,
 	  },
 	  buttonOpen: {
 		backgroundColor: '#F194FF',
