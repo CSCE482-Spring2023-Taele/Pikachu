@@ -21,15 +21,20 @@ import {
 	Modal,
 	Alert,
 	Pressable,
+	FlatList,
+	KeyboardAvoidingView
 } from 'react-native';
 
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import { GetObstructions, GetPath } from './path';
+import SearchBar from './SearchBar';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Geolocation from '@react-native-community/geolocation'; // for location
+import { geocodingAPI, saveLocation, getSavedLocations, reverseGeocodingAPI } from './functions';
+// import { KeyboardAvoidingView } from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
@@ -39,11 +44,15 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 export default function HomeScreen({navigation, route}) {
 	const token = route.params.token;
 
+	//const accessTokenPromise = MapLibreGL.getAccessToken().then((promise) => {return promise})
+	const mapboxToken = "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA"
+	
 	const [selected, setSelected] = useState('')
 	const [currentLongitude, setCurrentLongitude] = useState(0);
 	const [currentLatitude, setCurrentLatitude] = useState(0);
 	const [locationStatus, setLocationStatus ] = useState('');
 
+	// request location of phone
 	useEffect(() =>{
 		const requestLocationPermission = async () => {
 			try {
@@ -71,6 +80,7 @@ export default function HomeScreen({navigation, route}) {
 		};
 	}, []);
 
+	// current location of phone
 	const getOneTimeLocation = () => {
 		setLocationStatus('Getting Location ...');
 		Geolocation.getCurrentPosition(
@@ -101,6 +111,7 @@ export default function HomeScreen({navigation, route}) {
 		);
 	  };
 	
+	// current location of phone
 	const subscribeLocationLocation = () => {
 	watchID = Geolocation.watchPosition(
 		(position) => {
@@ -137,6 +148,7 @@ export default function HomeScreen({navigation, route}) {
 	const [obstructions, setObstructions] = useState([]);
 	const [polygons, setPolygons] = useState([]);
 
+	// obstructions
 	useEffect(() => {
 
 		const getObstructions = () => {
@@ -158,6 +170,7 @@ export default function HomeScreen({navigation, route}) {
 		};	
 	}, []);
 
+	// routing
 	useEffect(() => {
 		if (destinationCoord.length > 0 && selected === "route") {
 			GetPath(currentLongitude, currentLatitude,				// user location stuff goes here
@@ -190,90 +203,294 @@ export default function HomeScreen({navigation, route}) {
 	}
 
 	const [modalVisible, setModalVisible] = useState(false);
+	const [searchData, setSearchData] = useState([])
+	const [searchQuery, setSearchQuery] = useState("");
+	const [listVisible, setListVisible] = useState(false);
+	const [mapVisible, setMapVisible] = useState(true);
+	const [savedLocationListVisible, setSavedLocationListVisible] = useState(false)
+	const [savedLocationData, setSavedLocationData] = useState([])
 
+	useEffect(() => {
+
+		if(searchQuery != "" && searchQuery.length > 4) {
+			const fetchData = async () => {
+				const temp = await geocodingAPI(searchQuery, mapboxToken);;
+				setSearchData(temp.features)
+			}
+			fetchData().catch(console.error);
+			setListVisible(true)
+			setMapVisible(false)
+			setSavedLocationListVisible(false)
+		}
+		else if(searchQuery != "" && searchQuery.length <= 4) {
+			setListVisible(false)
+			setMapVisible(false)
+			setSavedLocationListVisible(true)
+		}
+		else {
+			setMapVisible(true);
+			setListVisible(false);
+			setSavedLocationListVisible(false);
+		}
+	},[searchQuery, listVisible]);
+	
+	// makes search list visible/invisible
+	function listStyle() {
+		if (listVisible == true) {
+			return {
+				flex: 1,
+				display:'flex',
+				// position: "absolute",
+				// top: "5%"
+			}
+		}
+		else {
+			return {
+				display:'none'
+			}
+		}
+	}
+	
+	// makes map visible/invisible
+	function mapStyle() {
+		if(mapVisible == true) {
+			return {
+				flex: 1,
+				display: "flex",
+			}
+		}
+		else {
+			return {
+				display:'none'
+			}
+		}
+	}
+
+	// sets name of icon next to search bar
+	function searchIconName() {
+		if (listVisible == true || savedLocationListVisible == true) {
+			return "arrow-left"
+		}
+		else {
+			return "map-marker"
+		}
+	}
+
+	function routeToSelectedSearch(searchCoordinates) {
+		setDestinationCoord(searchCoordinates)
+		setSelected("route")
+	}
+
+
+	// get data for saved locations
+	// updates when the map becomes visible/invisible
+	useEffect(() => {
+		const fetchData = async () => {
+			const databaseSavedLocations = await getSavedLocations(token);
+			console.log(databaseSavedLocations[0])
+			let tempArray = []
+			
+			for (location of databaseSavedLocations) {
+				const response = await reverseGeocodingAPI(location.longitude, location.latitude, mapboxToken);
+				console.log("features:",response.features[0])
+				tempArray.push(response.features[0])
+			}
+			console.log("REVERSE GEO",tempArray)
+			setSavedLocationData(tempArray)
+		}
+		fetchData().catch(console.error);
+	}, [mapVisible])
+
+	// make saved locations visible
+	function savedLocationStyle() {
+		if (savedLocationListVisible == true) {
+			return {
+				flex: 1,
+				display:'flex',
+				
+				// position: "absolute",
+				// top: "5%"
+			}
+		}
+		else {
+			return {
+				display:'none'
+			}
+		}
+	}
+
+	console.log(mapVisible, savedLocationListVisible, listVisible)
 	return (
+
 		<View style={styles.page}>
-			<View style={styles.container}>
-				<MapLibreGL.MapView style={styles.map} styleURL={"mapbox://styles/potato797/clfvkdirb000701ryajzh870m"} onPress={getSpot}>
-					<MapLibreGL.Camera
-						zoomLevel={16}
-						centerCoordinate={[currentLongitude, currentLatitude]}
+
+				<KeyboardAvoidingView>
+				
+				<View style={styles.inputBox}>
+					<TouchableOpacity
+						onPress={() => {setSearchQuery(""),Keyboard.dismiss(),setListVisible(false), setSavedLocationListVisible(false), setMapVisible(true)}}>
+
+						<Icon name = {searchIconName()} style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
+					</TouchableOpacity>
+					<TextInput
+						autoFocus={false}
+						onFocus={() => {setSavedLocationListVisible(true)}}
+						autoCorrect={false}
+						secureTextEntry={false}
+						style={{flex: 1, fontFamily: 'lucida grande', fontSize: 20,}}
+						placeholder = "Where to?"
+						placeholderTextColor="#9F9F9F"
+						onChangeText={(searchQuery) => {
+							setSearchQuery(searchQuery)
+						}}
+						value={searchQuery}
+						
 					/>
-					{
-						path.length > 0 &&
-						<MapLibreGL.ShapeSource
-							id="path"
-							lineMetrics={true}
-							shape={{
-								type: 'Feature',
-								geometry: {
-									type: 'LineString',
-									coordinates: path,
-								},
-							}}
-						>
-							<MapLibreGL.LineLayer id="path-layer" style={styles.lineLayer} />
-						</MapLibreGL.ShapeSource>
-					}
-					{
-						obstructions.map((obstruction) => {
-							return (
-								<MapLibreGL.PointAnnotation
-									key={`obstruction-${obstruction.idObstructions}`}
-									id={`obstruction-${obstruction.idObstructions}`}
-									coordinate={[parseFloat(obstruction.latitude),parseFloat(obstruction.longitude)]}
-									anchor={{x: 0, y: 0}} >
-									<View style={styles.obstruction}>
-									</View>
-								</MapLibreGL.PointAnnotation>
-							)
-						})
-					}
-					<MapLibreGL.PointAnnotation
-						key={"square-start"}
-						id={"square-start"}
-						coordinate={[-96.34156349159862,30.617461341278755]}
-						anchor={{x: 0, y: 0}} >
-						<View style={styles.test}>
+				</View>
+				
+
+				<FlatList
+					style={listStyle()}
+					data={searchData}
+					keyExtractor={(item, index) => String(index)}
+					renderItem={({item, index}) =>
+						<View>
+							<TouchableOpacity onPress={() => {routeToSelectedSearch(item.geometry.coordinates), setListVisible(false), setSavedLocationListVisible(false), setSearchQuery(""), Keyboard.dismiss()}}>
+								<Text style={{paddingTop:20,
+								paddingBottom:3, 
+								marginHorizontal: 10,
+								fontSize: 20, borderBottomWidth: 1}}>{item.place_name}</Text>
+							</TouchableOpacity>
 						</View>
-					</MapLibreGL.PointAnnotation>
-				</MapLibreGL.MapView>
+				}/>
+
+				<View style={savedLocationStyle()}>
+					<View>
+						<Text style={{paddingTop: 10, paddingLeft: 5}}>Saved Locations</Text>
+					</View>
+					<FlatList
+						
+						data={savedLocationData}
+						renderItem={({item}) =>
+							<View>
+								<TouchableOpacity onPress={() => {routeToSelectedSearch(item.geometry.coordinates), setListVisible(false), setSavedLocationListVisible(false), setSearchQuery(""), Keyboard.dismiss()}}>
+									<Text style={{paddingTop:20,
+									paddingBottom:3, 
+									marginHorizontal: 10,
+									fontSize: 20, borderBottomWidth: 1}}>{item.place_name}</Text>
+								</TouchableOpacity>
+							</View>
+					}/>
+				</View>
+				</KeyboardAvoidingView>
+
+				<View style={styles.map_container}>
+					<MapLibreGL.MapView 
+						style={mapStyle()}
+						styleURL={"mapbox://styles/potato797/clfvkdirb000701ryajzh870m"}
+						onPress={getSpot}
+						visible={true}
+					>
+						<MapLibreGL.Camera
+							zoomLevel={16}
+							centerCoordinate={[currentLongitude, currentLatitude]}
+							
+							
+						/>
+						<MapLibreGL.UserLocation
+							visible={true}
+						/>
+						{
+							path.length > 0 &&
+							<MapLibreGL.ShapeSource
+								id="path"
+								lineMetrics={true}
+								shape={{
+									type: 'Feature',
+									geometry: {
+										type: 'LineString',
+										coordinates: path,
+									},
+								}}
+							>
+								<MapLibreGL.LineLayer id="path-layer" style={styles.lineLayer} />
+							</MapLibreGL.ShapeSource>
+						}
+						
+						{
+							obstructions.map((obstruction) => {
+								return (
+									<MapLibreGL.PointAnnotation
+										key={`obstruction-${obstruction.idObstructions}`}
+										id={`obstruction-${obstruction.idObstructions}`}
+										coordinate={[parseFloat(obstruction.latitude),parseFloat(obstruction.longitude)]}
+										anchor={{x: 0, y: 0}} >
+										<View style={styles.obstruction}>
+										</View>
+									</MapLibreGL.PointAnnotation>
+								)
+							})
+						}
+						{/* <MapLibreGL.PointAnnotation
+							key={"square-start"}
+							id={"square-start"}
+							coordinate={[-96.34156349159862,30.617461341278755]}
+							anchor={{x: 0, y: 0}} >
+							<View style={styles.test}>
+								<Text>hello</Text>
+							</View>
+						</MapLibreGL.PointAnnotation> */}
+
+					</MapLibreGL.MapView>
+				</View>
+				
+
+				<Modal
+					animationType="slide"
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {
+					Alert.alert('Modal has been closed.');
+					setModalVisible(!modalVisible);
+					}}>
+					<View style={styles.centeredView}>
+					<View style={styles.modalView}>
+						<Text style={styles.modalText}>Hello World!</Text>
+						<Pressable
+						style={[styles.button, styles.buttonClose]}
+						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+						<Text style={styles.textStyle}>Route</Text>
+						</Pressable>
+						<Pressable
+						onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+						style={[styles.buttons, {marginRight: 10}]}>
+							<Text>Report</Text>
+						</Pressable>
+					</View>
+					</View>
+				</Modal>
+				
 			</View>
-
-
-
-
-			
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => {
-				Alert.alert('Modal has been closed.');
-				setModalVisible(!modalVisible);
-				}}>
-				<View style={styles.centeredView}>
-				<View style={styles.modalView}>
-					<Text style={styles.modalText}>Hello World!</Text>
-					<Pressable
-					style={[styles.button, styles.buttonClose]}
-					onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
-					<Text style={styles.textStyle}>Route</Text>
-					</Pressable>
-					<Pressable
-					onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-					style={[styles.buttons, {marginRight: 10}]}>
-						<Text>Report</Text>
-					</Pressable>
-				</View>
-				</View>
-			</Modal>
-			
-		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	inputsContainer: {
+		elevation: 4,
+	},
+	inputBox: {
+		
+		elevation: 5,
+		width: "100%",
+        height: (deviceHeight/100)*6,
+        
+        backgroundColor: '#d6e0cb',
+        textAlign: 'left',
+        textAlignVertical: 'center',
+        flexDirection: 'row',
+        fontFamily: '',
+		alignItems:'center'
+	  },
 	centeredView: {
 		flex: 1,
 		justifyContent: 'center',
@@ -321,12 +538,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	container: {
-		flex: 1, 
+	map_container: {
 		height: "100%",
 		width: "100%",
-	},
-	map: {
 		flex: 1
 	},
 	test: {

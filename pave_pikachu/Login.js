@@ -37,12 +37,12 @@ export default function LoginScreen({navigation}) {
         try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
-        console.log(userInfo)
+        
         setUser(userInfo)
         // user signed in and now we redirect
         const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
-            console.log("token: " + response.token);
+            
             navigation.navigate("Tabs", {token: response.token});
         }
         
@@ -62,7 +62,7 @@ export default function LoginScreen({navigation}) {
 
     const isSignedIn = async () => {
         const isSignedIn = await GoogleSignin.isSignedIn();
-        console.log(userInfo)
+        
         if (!!isSignedIn) {
         getCurrentUserInfo()
         } else {

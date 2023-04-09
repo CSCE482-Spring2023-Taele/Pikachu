@@ -36,6 +36,7 @@ import LoginScreen from './Login.js';
 import RegisterScreen from './Register.js';
 import RegisterSuccessScreen from './RegisterSuccess.js';
 import MenuScreen from './Menu.js';
+import SearchScreen from './SearchBar.js';
 
 // MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
 
@@ -45,7 +46,7 @@ function MyTabs({navigation, route}) {
   const temp = route.params.token;
 
   return (
-    <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
+    <Tab.Navigator initialRouteName='Home' screenOptions={{tabBarHideOnKeyboard: true, headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
       <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
@@ -81,6 +82,7 @@ const App = () => {
 			<Stack.Screen name="Register" component={RegisterScreen} />
 			<Stack.Screen name="RegisterSuccess" component={RegisterSuccessScreen} />
 			<Stack.Screen name="Menu" component={MenuScreen} options={{gestureDirection: "vertical"}} />
+			<Stack.Screen name="Search" component={SearchScreen} />
 		  </Stack.Navigator>
 		</NavigationContainer>
 	  );

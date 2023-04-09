@@ -96,5 +96,92 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
     return resData;
 }
 
-export {attemptLogin, attemptRegister, attemptReport};
+const geocodingAPI = async (search, mapboxToken, boundingBox) => {
+    const address = encodeURIComponent(search.trim())
+
+    const bb = "-180%2C-90%2C180%2C90" //example
+    //const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + address + ".json?country=us&bbox="+ bb +"&language=en&access_token="+mapboxToken;
+    const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + address + ".json?country=us&language=en&access_token="+mapboxToken;
+    console.log(geoURL)
+    const response = await fetch(geoURL);
+    
+    let resData = await response.text()
+    resData = JSON.parse(resData)
+   
+    return resData;
+}
+
+const reverseGeocodingAPI = async(longitude, latitude, mapboxToken) => {
+    const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+longitude+","+latitude+".json?country=us&limit=1&access_token="+mapboxToken;
+    console.log(geoURL)
+    const response = await fetch(geoURL);
+    
+    let resData = await response.text()
+    resData = JSON.parse(resData)
+   
+    return resData;
+}
+
+const saveLocation = async(coordinates, token) => {
+    const data = {
+        longitude: coordinates[0],
+        latitude: coordinates[1],
+    };
+
+    let reqHeader = new Headers();
+    reqHeader.append('Content-Type', 'application/json');
+    reqHeader.append("Authorization", "Bearer " + token);
+
+    let initObject = {
+        method: 'POST', headers: reqHeader, body: JSON.stringify(data)
+    };
+
+    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    let resData = await fetch(url + "/save-location", initObject)
+        .then(response => {
+            let result = response.json();
+            console.log("here2");
+            return result;
+        })
+        .then(async(promise) => {
+            console.log("here3");
+            return promise;
+        })
+        .catch(function(err) {
+            console.log("ERROR", err);
+        });
+    console.log(resData)
+}
+
+const getSavedLocations = async(token) => {
+    let reqHeader = new Headers();
+    reqHeader.append('Content-Type', 'application/json');
+    reqHeader.append("Authorization", "Bearer " + token);
+
+    let initObject = {
+        method: 'GET', headers: reqHeader
+    };
+
+    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    let response = await fetch(url + "/saved-locations", initObject)
+        // .then(response => {
+        //     let result = response.json();
+        //     console.log("here2");
+        //     return result;
+        // })
+        // .then(async(promise) => {
+        //     console.log("here3");
+        //     return promise;
+        // })
+        // .catch(function(err) {
+        //     console.log("ERROR", err);
+        // });
+    let resData = await response.text()
+    resData = JSON.parse(resData)
+    return resData
+}
+
+
+
+export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations};
 
