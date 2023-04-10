@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Dimensions, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Dimensions, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, FlatList, ScrollView } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -12,25 +12,44 @@ import { Platform } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements'
 
+import { useIsFocused } from "@react-navigation/native";
+
+import { getSavedLocations, reverseGeocodingAPI } from './functions';
+
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 
 export default function ProfileScreen({navigation, route}) {
 
-    const favLat = route.params.lat;
-    const favLong = route.params.long;
+    const mapboxToken = "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA"
     const token = route.params.token;
-
-    /*
-    const favorite = async() => {
-        let response = await saveLocation(lat, long, token);
-        console.log(response.message);
-
-        navigation.navigate('Tabs', {token: token});
-    }*/
-    
     const temp2 = route.params.user;
+
+    const [savedLocationData, setSavedLocationData] = useState([]);
+
+    const isFocused = useIsFocused();
+
+	useEffect(() => {
+        console.log("in profile")
+        console.log(mapboxToken);
+		const fetchData = async () => {
+			const databaseSavedLocations = await getSavedLocations(token);
+			console.log(databaseSavedLocations[0])
+			let tempArray = []
+			
+			for (location of databaseSavedLocations) {
+				const response = await reverseGeocodingAPI(location.longitude, location.latitude, mapboxToken);
+				console.log("features:",response.features[0])
+				tempArray.push(response.features[0])
+			}
+			console.log("REVERSE GEO PROFILE",tempArray)
+			setSavedLocationData(tempArray)
+		}
+		fetchData().catch(console.error);
+	}, [isFocused])
+    
+    
 
     return (
         <View style={[styles.container, {flex: 1}]}>
@@ -44,24 +63,33 @@ export default function ProfileScreen({navigation, route}) {
 
 
             <View style={[styles.inputsContainer, {flex:0.14, }]}>
-            <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 8, fontWeight: '500', fontSize: 17}}>First Name</Text>
+            <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 0, fontWeight: '500', fontSize: 17}}>First Name</Text>
                 <View style={styles.inputBox}>
                     <Text style={{flex: 1, fontFamily: 'lucida grande', fontWeight: '500', paddingTop: 13, fontSize: 17, paddingLeft: 20}}>{temp2.givenName}</Text>
                 </View>
             </View>
 
             <View style={[styles.inputsContainer, {flex:0.14, }]}>
-            <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 8, fontWeight: '500', fontSize: 17}}>Last Name</Text>
+                <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 0, fontWeight: '500', fontSize: 17}}>Last Name</Text>
                 <View style={styles.inputBox}>
                     <Text style={{flex: 1, fontFamily: 'lucida grande', fontWeight: '500', paddingTop: 13, fontSize: 17, paddingLeft: 20}}>{temp2.familyName}</Text>
                 </View>
             </View>
 
-            <View style={[styles.inputsContainer, {flex:0.16, }]}>
-            <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 8, fontWeight: '500', fontSize: 17}}>Favorite Location</Text>
-                <View style={styles.locationBox}>
-                    <Text style={{flex: 1, fontFamily: 'lucida grande', fontWeight: '500', paddingTop: 13, fontSize: 17, paddingLeft: 20}}>{favLat}, {favLong}</Text>
-                </View>
+            <View style={[styles.inputsContainer, {flex:0.16,}]}>
+                <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 0, fontWeight: '500', fontSize: 17}}>Saved Location(s)</Text>
+                <ScrollView style={[styles.locationBox, {marginBottom: 10,}]}>
+                    <FlatList
+                            data={savedLocationData}
+                            renderItem={({item}) =>
+                                <View style={{width: 300}}>
+                                    <Text style={{paddingTop:20,
+                                        paddingBottom:3, 
+                                        marginHorizontal: 10,
+                                        fontSize: 17, borderBottomWidth: 1}}>{item.place_name}</Text>
+                                </View>
+                        }/>
+                </ScrollView>
             </View>
 
 
@@ -71,12 +99,12 @@ export default function ProfileScreen({navigation, route}) {
   
 const styles = StyleSheet.create({
 container: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     justifyContent: 'center',
 },
 titleText: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     fontSize: 32,
     fontWeight: '700',
@@ -107,7 +135,7 @@ inputBox: {
     width: 300,
     height: (deviceHeight/100)*6    ,
     borderRadius: 22,
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     textAlign: 'left',
     textAlignVertical: 'center',
     flexDirection: 'row',
@@ -118,7 +146,7 @@ locationBox: {
     width: 300,
     height: (deviceHeight/100)*8    ,
     borderRadius: 22,
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     textAlign: 'left',
     textAlignVertical: 'center',
     flexDirection: 'row',

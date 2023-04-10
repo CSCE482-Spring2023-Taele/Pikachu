@@ -319,6 +319,15 @@ export default function HomeScreen({navigation, route}) {
 		}
 	}
 
+	const [showObstructionDescription, setShowObstructionDescription] = useState(false);
+	const [obstructionDescription, setObstructionDescription] = useState({"description": ""});
+	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
+
+	useEffect(() => {
+		console.log("obstructionDescription", obstructionDescription)
+	}, [showObstructionDescription, obstructionDescription])
+
+
 	console.log(mapVisible, savedLocationListVisible, listVisible)
 	return (
 
@@ -339,7 +348,7 @@ export default function HomeScreen({navigation, route}) {
 						secureTextEntry={false}
 						style={{flex: 1, fontFamily: 'lucida grande', fontSize: 20,}}
 						placeholder = "Where to?"
-						placeholderTextColor="#9F9F9F"
+						placeholderTextColor="#686969"
 						onChangeText={(searchQuery) => {
 							setSearchQuery(searchQuery)
 						}}
@@ -391,11 +400,20 @@ export default function HomeScreen({navigation, route}) {
 						onPress={getSpot}
 						visible={true}
 					>
+					{
+						(modalVisible || path.length > 0) &&
+						<MapLibreGL.PointAnnotation
+							key={"user-marker"}
+							id={"user-marker"}
+							coordinate={[parseFloat(destinationCoord[0]),parseFloat(destinationCoord[1])]}
+							anchor={{x: 0, y: 0}} >
+							<View style={[styles.obstruction, {width: 30, height: 30}]}>
+							</View>
+						</MapLibreGL.PointAnnotation>
+					}
 						<MapLibreGL.Camera
 							zoomLevel={16}
 							centerCoordinate={[currentLongitude, currentLatitude]}
-							
-							
 						/>
 						<MapLibreGL.UserLocation
 							visible={true}
@@ -439,16 +457,6 @@ export default function HomeScreen({navigation, route}) {
 								)
 							})
 						}
-						{/* <MapLibreGL.PointAnnotation
-							key={"square-start"}
-							id={"square-start"}
-							coordinate={[-96.34156349159862,30.617461341278755]}
-							anchor={{x: 0, y: 0}} >
-							<View style={styles.test}>
-								<Text>hello</Text>
-							</View>
-						</MapLibreGL.PointAnnotation> */}
-
 					</MapLibreGL.MapView>
 				</View>
 				
@@ -520,7 +528,7 @@ const styles = StyleSheet.create({
 		width: "100%",
         height: (deviceHeight/100)*6,
         
-        backgroundColor: '#d6e0cb',
+        backgroundColor: '#b3c7f7',
         textAlign: 'left',
         textAlignVertical: 'center',
         flexDirection: 'row',
@@ -552,7 +560,8 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
-        backgroundColor: "#d6e0cb",
+        backgroundColor: "#0073e6",
+		width: 80,
 	  },
 	  mbottom: {
 		marginBottom: 3,
@@ -561,7 +570,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F194FF',
 	  },
 	  buttonClose: {
-		backgroundColor: '#2196F3',
+		backgroundColor: '#0073e6',
 	  },
 	  textStyle: {
 		color: 'white',
@@ -591,7 +600,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	obstruction: {
-		backgroundColor: '#c44601',
+		backgroundColor: '#f57600',
 		height: 10,
 		justifyContent: 'center',
 		width: 10,
