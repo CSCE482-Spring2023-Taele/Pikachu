@@ -339,7 +339,7 @@ export default function HomeScreen({navigation, route}) {
 						secureTextEntry={false}
 						style={{flex: 1, fontFamily: 'lucida grande', fontSize: 20,}}
 						placeholder = "Where to?"
-						placeholderTextColor="#9F9F9F"
+						placeholderTextColor="#686969"
 						onChangeText={(searchQuery) => {
 							setSearchQuery(searchQuery)
 						}}
@@ -454,20 +454,20 @@ export default function HomeScreen({navigation, route}) {
 					<View style={styles.centeredView}>
 					<View style={styles.modalView}>
 						<Pressable
-						style={[styles.button, styles.buttonClose]}
-						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}
+						style={[styles.button, styles.mbottom]}>
 							<Text style={styles.textStyle}>Route</Text>
 						</Pressable>
 						
 						<Pressable
 						onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-						style={[styles.buttons, {marginRight: 10}]}>
-							<Text>Report</Text>
+						style={[styles.button, styles.mbottom]}>
+							<Text style={styles.textStyle}>Report</Text>
 						</Pressable>
-						
+
 						<Pressable
 						onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
-						style={[styles.button, styles.buttonClose, styles.mbottom]}>
+						style={[styles.button, styles.mbottom]}>
 							<Text style={styles.textStyle}>Favorite</Text>
 					</Pressable>
 					</View>
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
 		width: "100%",
         height: (deviceHeight/100)*6,
         
-        backgroundColor: '#d6e0cb',
+        backgroundColor: '#b3c7f7',
         textAlign: 'left',
         textAlignVertical: 'center',
         flexDirection: 'row',
@@ -520,7 +520,8 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
-        backgroundColor: "#d6e0cb",
+        backgroundColor: "#0073e6",
+		width: 80,
 	  },
 	  mbottom: {
 		marginBottom: 3,
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F194FF',
 	  },
 	  buttonClose: {
-		backgroundColor: '#2196F3',
+		backgroundColor: '#0073e6',
 	  },
 	  textStyle: {
 		color: 'white',
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	obstruction: {
-		backgroundColor: '#c44601',
+		backgroundColor: '#f57600',
 		height: 10,
 		justifyContent: 'center',
 		width: 10,

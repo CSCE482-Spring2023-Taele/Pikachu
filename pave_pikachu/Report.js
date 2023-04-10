@@ -62,7 +62,7 @@ export default function ReportScreen({navigation, route}) {
   
 const styles = StyleSheet.create({
 container: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
@@ -70,7 +70,7 @@ container: {
     padding: 20
 },
 titleText: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     fontSize: 32,
     fontWeight: '700',
@@ -83,7 +83,7 @@ buttons: {
     height: (deviceHeight/100)*6,
     alignItems: 'center',
     textAlignVertical: 'center',
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     borderRadius: 22,
     marginBottom: 15,
     marginTop: 15,
@@ -94,7 +94,7 @@ inputBox: {
     // height: (deviceHeight/100)*6,
     height: "100%",
     borderRadius: 22,
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     textAlign: 'left',
     // textAlignVertical: 'center',
     flexDirection: 'row',

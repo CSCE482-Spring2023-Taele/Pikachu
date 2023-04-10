@@ -71,12 +71,12 @@ export default function ProfileScreen({navigation, route}) {
   
 const styles = StyleSheet.create({
 container: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     justifyContent: 'center',
 },
 titleText: {
-    backgroundColor: '#C8D5B9',
+    backgroundColor: '#b3c7f7',
     alignItems: 'center',
     fontSize: 32,
     fontWeight: '700',
@@ -107,7 +107,7 @@ inputBox: {
     width: 300,
     height: (deviceHeight/100)*6    ,
     borderRadius: 22,
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     textAlign: 'left',
     textAlignVertical: 'center',
     flexDirection: 'row',
@@ -118,7 +118,7 @@ locationBox: {
     width: 300,
     height: (deviceHeight/100)*8    ,
     borderRadius: 22,
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     textAlign: 'left',
     textAlignVertical: 'center',
     flexDirection: 'row',
