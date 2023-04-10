@@ -487,20 +487,20 @@ export default function HomeScreen({navigation, route}) {
 						<View style={styles.centeredView}>
 							<View style={styles.modalView}>
 								<Pressable
-								style={[styles.button, styles.buttonClose]}
+								style={[styles.button, styles.mbottom]}
 								onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
 									<Text style={styles.textStyle}>Route</Text>
 								</Pressable>
 								
 								<Pressable
 								onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-								style={[styles.buttons, {marginRight: 10}]}>
-									<Text>Report</Text>
+								style={[styles.button, styles.mbottom]}>
+									<Text style={styles.textStyle}>Report</Text>
 								</Pressable>
 								
 								<Pressable
 								onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
-								style={[styles.button, styles.buttonClose, styles.mbottom]}>
+								style={[styles.button, styles.mbottom]}>
 									<Text style={styles.textStyle}>Favorite</Text>
 							</Pressable>
 							</View>
