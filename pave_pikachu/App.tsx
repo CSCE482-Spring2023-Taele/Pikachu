@@ -45,7 +45,7 @@ function MyTabs({navigation, route}) {
   const temp2 = route.params.user;
 
   return (
-    <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#b3c7f7', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
+    <Tab.Navigator initialRouteName='Home' screenOptions={{tabBarHideOnKeyboard: true, headerShown: false, tabBarStyle: { backgroundColor: '#b3c7f7', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
       <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp, user: temp2}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
