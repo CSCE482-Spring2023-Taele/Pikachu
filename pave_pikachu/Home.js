@@ -450,22 +450,26 @@ export default function HomeScreen({navigation, route}) {
 					transparent={true}
 					visible={modalVisible}
 					onRequestClose={() => {
-					Alert.alert('Modal has been closed.');
-					setModalVisible(!modalVisible);
 					}}>
 					<View style={styles.centeredView}>
 					<View style={styles.modalView}>
-						<Text style={styles.modalText}>Hello World!</Text>
 						<Pressable
 						style={[styles.button, styles.buttonClose]}
 						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
-						<Text style={styles.textStyle}>Route</Text>
+							<Text style={styles.textStyle}>Route</Text>
 						</Pressable>
+						
 						<Pressable
-						onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+						onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
 						style={[styles.buttons, {marginRight: 10}]}>
 							<Text>Report</Text>
 						</Pressable>
+						
+						<Pressable
+						onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+						style={[styles.button, styles.buttonClose, styles.mbottom]}>
+							<Text style={styles.textStyle}>Favorite</Text>
+					</Pressable>
 					</View>
 					</View>
 				</Modal>
