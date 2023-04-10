@@ -76,20 +76,27 @@ export default function ProfileScreen({navigation, route}) {
                 </View>
             </View>
 
-            <View style={[styles.inputsContainer, {flex:0.16,}]}>
-                <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 0, fontWeight: '500', fontSize: 17}}>Saved Location(s)</Text>
-                <ScrollView style={[styles.locationBox, {marginBottom: 10,}]}>
+            <View style={[styles.inputsContainer, {flex:0.29,}]}>
+                <Text style={{flex: 1, fontFamily: 'lucida grande', paddingLeft: 15, paddingBottom: 5, fontWeight: '500', fontSize: 17}}>Saved Location(s)</Text>
+                <View style={[styles.locationBox,]}>
                     <FlatList
                             data={savedLocationData}
                             renderItem={({item}) =>
-                                <View style={{width: 300}}>
+                            <View style={{flexDirection: 'row', borderBottomWidth: 1}}>
+                                <View style={{width: 250}}>
                                     <Text style={{paddingTop:20,
                                         paddingBottom:3, 
                                         marginHorizontal: 10,
-                                        fontSize: 17, borderBottomWidth: 1}}>{item.place_name}</Text>
+                                        fontSize: 17, }}>{item.place_name}</Text>
                                 </View>
+                                <TouchableOpacity style = {{alignSelf: 'flex-end'}}>
+                                    <View style={{display: 'flex', justifyContent: 'center', marginBottom: 10}}>
+                                        <Icon name = "delete" style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         }/>
-                </ScrollView>
+                </View>
             </View>
 
 
@@ -133,7 +140,7 @@ image: {
 inputBox: {
     marginBottom: 30,
     width: 300,
-    height: (deviceHeight/100)*6    ,
+    height: (deviceHeight/100)*6,
     borderRadius: 22,
     backgroundColor: '#d1daf0',
     textAlign: 'left',
@@ -144,7 +151,7 @@ inputBox: {
 locationBox: {
     marginBottom: 30,
     width: 300,
-    height: (deviceHeight/100)*8    ,
+    height: (deviceHeight/100)*20,
     borderRadius: 22,
     backgroundColor: '#d1daf0',
     textAlign: 'left',

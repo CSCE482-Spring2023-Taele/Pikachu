@@ -78,8 +78,6 @@ const App = () => {
 			<Stack.Screen name="Report" component={ReportScreen} />
 			<Stack.Screen name="Profile" component={ProfileScreen} />
 			<Stack.Screen name="Login" component={LoginScreen} />
-			<Stack.Screen name="Register" component={RegisterScreen} />
-			<Stack.Screen name="RegisterSuccess" component={RegisterSuccessScreen} />
 		  </Stack.Navigator>
 		</NavigationContainer>
 	  );
