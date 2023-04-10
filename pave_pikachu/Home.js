@@ -495,9 +495,9 @@ export default function HomeScreen({navigation, route}) {
 						</Pressable>
 
 						<Pressable
-						onPress={() => {navigation.navigate('Profile', {token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+						onPress={() => {setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
 						style={[styles.button, styles.mbottom]}>
-							<Text style={styles.textStyle}>Favorite</Text>
+							<Text style={styles.textStyle}>Save</Text>
 					</Pressable>
 					</View>
 					</View>
