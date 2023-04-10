@@ -320,8 +320,12 @@ export default function HomeScreen({navigation, route}) {
 	}
 
 	const [showObstructionDescription, setShowObstructionDescription] = useState(false);
-	const [obstructionDescription, setObstructionDescription] = useState({});
+	const [obstructionDescription, setObstructionDescription] = useState({"type": "", "description": ""});
 	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
+
+	useEffect(() => {
+		console.log("obstructionDescription", obstructionDescription["type"])
+	}, [showObstructionDescription, obstructionDescription])
 
 
 	console.log(mapVisible, savedLocationListVisible, listVisible)
@@ -397,13 +401,13 @@ export default function HomeScreen({navigation, route}) {
 						visible={true}
 					>
 					{
-						modalVisible &&
+						(modalVisible || path.length > 0) &&
 						<MapLibreGL.PointAnnotation
 							key={"user-marker"}
 							id={"user-marker"}
 							coordinate={[parseFloat(destinationCoord[0]),parseFloat(destinationCoord[1])]}
 							anchor={{x: 0, y: 0}} >
-							<View style={styles.obstruction}>
+							<View style={[styles.obstruction, {width: 30, height: 30}]}>
 							</View>
 						</MapLibreGL.PointAnnotation>
 					}
@@ -440,7 +444,7 @@ export default function HomeScreen({navigation, route}) {
 										coordinate={[parseFloat(obstruction.latitude),parseFloat(obstruction.longitude)]}
 										anchor={{x: 0, y: 0}}
 										onSelected={() => {
-											setObstructionDescription(obstruction);
+											setObstructionDescription((obstruction));
 											setShowObstructionDescription(true);
 										}} >
 										<View style={styles.obstruction}>
@@ -452,17 +456,21 @@ export default function HomeScreen({navigation, route}) {
 					</MapLibreGL.MapView>
 				</View>
 				
-				{
-					showObstructionDescription &&
-					<Modal>
-						<View style={{ flex: 1 }}>
-							<Text>{obstructionDescription}</Text>
-							<Text>{obstructionDescription.type}</Text>
-							<Text>{obstructionDescription.description}</Text>
-							<Button title="Hide Modal" onPress={handleShowObstructionDescription} />
-						</View>
-					</Modal>
-				}
+				<Modal animationType="slide"
+				transparent={true}
+				visible={showObstructionDescription}>
+					<View style={styles.centeredView}>
+					<View style={styles.modalView}>
+						<Text>{obstructionDescription["type"]}</Text>
+						<Text>{obstructionDescription["description"]}</Text>
+						<Pressable style={[styles.button, styles.buttonClose]} onPress={handleShowObstructionDescription}>
+							<Text>
+								Hide Modal
+							</Text>
+						</Pressable>
+					</View>
+					</View>
+				</Modal>
 
 				<Modal
 					animationType="slide"
