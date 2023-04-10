@@ -14,7 +14,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { getSavedLocations, reverseGeocodingAPI } from './functions';
+import { getSavedLocations, reverseGeocodingAPI, deleteSavedLocation } from './functions';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
@@ -91,7 +91,7 @@ export default function ProfileScreen({navigation, route}) {
                                 </View>
                                 <TouchableOpacity style = {{alignSelf: 'flex-end'}}>
                                     <View style={{display: 'flex', justifyContent: 'center', marginBottom: 10}}>
-                                        <Icon name = "delete" style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
+                                        <Icon onPress={ () => deleteSavedLocation(item.geometry.coordinates[0], item.geometry.coordinates[1], token )} name = "delete" style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
                                     </View>
                                 </TouchableOpacity>
                             </View>

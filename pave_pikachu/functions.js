@@ -179,7 +179,41 @@ const getSavedLocations = async(token) => {
     return resData
 }
 
+const deleteSavedLocation = async(long, lat, token) => {
+    const data = {
+        longitude: long,
+        latitude: lat,
+    };
+
+    console.log("lat: " + lat);
+    console.log("long: " + long);
+
+    let reqHeader = new Headers();
+    reqHeader.append('Content-Type', 'application/json');
+    reqHeader.append("Authorization", "Bearer " + token);
+
+    let initObject = {
+        method: 'POST', headers: reqHeader, body: JSON.stringify(data)
+    };
+
+    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    let resData = await fetch(url + "/remove-saved-location", initObject)
+        .then(response => {
+            let result = response.json();
+            console.log("delete here");
+            return result;
+        })
+        .then(async(promise) => {
+            console.log("delete here2");
+            return promise;
+        })
+        .catch(function(err) {
+            console.log("ERROR", err);
+        });
+    
+}
 
 
-export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations};
+
+export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations,  deleteSavedLocation};
 

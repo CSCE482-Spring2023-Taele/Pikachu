@@ -499,7 +499,7 @@ export default function HomeScreen({navigation, route}) {
 								</Pressable>
 								
 								<Pressable
-								onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+								onPress={() => {setModalVisible(!modalVisible), saveLocation(destinationCoord, token, mapboxToken)}}
 								style={[styles.button, styles.mbottom]}>
 									<Text style={styles.textStyle}>Favorite</Text>
 							</Pressable>
