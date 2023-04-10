@@ -24,7 +24,7 @@ export default function ReportScreen({navigation, route}) {
     const [reportLocation, setReportLocation] = useState("");
 
     const report = async() => {
-        let response = await attemptReport(lat, long, "puddle", description, token);
+        let response = await attemptReport(lat, long, "type", description, token);
         console.log(response.message);
 
         navigation.navigate('Tabs', {token: token});

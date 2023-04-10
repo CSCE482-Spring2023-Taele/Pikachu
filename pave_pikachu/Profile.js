@@ -14,7 +14,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { getSavedLocations, reverseGeocodingAPI, deleteSavedLocation } from './functions';
+import { getSavedLocations, reverseGeocodingAPI, deleteSavedLocation, deleteAccount } from './functions';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
@@ -91,7 +91,7 @@ export default function ProfileScreen({navigation, route}) {
                                 </View>
                                 <TouchableOpacity style = {{alignSelf: 'flex-end'}}>
                                     <View style={{display: 'flex', justifyContent: 'center', marginBottom: 10}}>
-                                        <Icon onPress={ () => deleteSavedLocation(item.geometry.coordinates[0], item.geometry.coordinates[1], token )} name = "delete" style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
+                                        <Icon onPress={ () => {deleteSavedLocation(item.geometry.coordinates[0], item.geometry.coordinates[1], token), navigation.navigate('Home', {token: token, user: temp2})}} name = "delete" style={{fontSize: 25, justifyContent:"center", padding: 10}}/>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -99,6 +99,11 @@ export default function ProfileScreen({navigation, route}) {
                 </View>
             </View>
 
+            <View style={[styles.inputsContainer, {flex: .1 }]}>
+                <TouchableOpacity onPress={() => {deleteAccount(token), navigation.navigate('Login')}} style={[styles.buttons, {marginRight: 10}]}>
+                    <Text style={{fontFamily: 'lucida grande'}}>Delete Account</Text>
+                </TouchableOpacity>
+            </View>
 
         </View>
     );
@@ -120,11 +125,11 @@ titleText: {
 buttons: {
     display: 'flex',
     justifyContent: 'center',
-    width: 80,
+    width: 150,
     height: (deviceHeight/100)*6,
     alignItems: 'center',
     textAlignVertical: 'center',
-    backgroundColor: '#d6e0cb',
+    backgroundColor: '#d1daf0',
     borderRadius: 22,
     marginBottom: 15,
     marginTop: 15,

@@ -209,11 +209,31 @@ const deleteSavedLocation = async(long, lat, token) => {
         })
         .catch(function(err) {
             console.log("ERROR", err);
-        });
-    
+        });   
+}
+
+const deleteAccount = async(token) => {
+    console.log("deleting...")
+
+    let reqHeader = new Headers();
+    reqHeader.append('Content-Type', 'application/json');
+    reqHeader.append("Authorization", "Bearer " + token);
+
+    let initObject = {
+        method: 'GET', headers: reqHeader
+    };
+
+    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    let response = await fetch(url + "/deactivate", initObject)
+
+    let resData = await response.text()
+    resData = JSON.parse(resData)
+
+    console.log(resData);
+    return resData
 }
 
 
 
-export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations,  deleteSavedLocation};
+export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations,  deleteSavedLocation, deleteAccount};
 
