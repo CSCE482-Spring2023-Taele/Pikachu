@@ -424,7 +424,15 @@ export default function HomeScreen({navigation, route}) {
 										key={`obstruction-${obstruction.idObstructions}`}
 										id={`obstruction-${obstruction.idObstructions}`}
 										coordinate={[parseFloat(obstruction.latitude),parseFloat(obstruction.longitude)]}
-										anchor={{x: 0, y: 0}} >
+										anchor={{x: 0, y: 0}}
+										onSelected={() => {
+											setObstructionDescription((obstruction));
+											setShowObstructionDescription(true);
+										}}
+										onDeselected={() => {
+											console.log("DESELECTED");
+											setShowObstructionDescription(false);
+										}} >
 										<View style={styles.obstruction}>
 										</View>
 									</MapLibreGL.PointAnnotation>
@@ -444,34 +452,58 @@ export default function HomeScreen({navigation, route}) {
 					</MapLibreGL.MapView>
 				</View>
 				
+				<Modal 
+					animationType="slide"
+					transparent={true}
+					visible={showObstructionDescription}
+				>
+					<TouchableOpacity
+						style={{flex:1}}
+						onPress={() => {
+							setShowObstructionDescription(false)
+						}
+					}>
+					<View style={styles.centeredView}>
+						<View style={styles.modalView}>
+							<Text>{obstructionDescription["description"]}</Text>
+						</View>
+					</View>
+					</TouchableOpacity>
+				</Modal>
 
 				<Modal
 					animationType="slide"
 					transparent={true}
 					visible={modalVisible}
-					onRequestClose={() => {
-					}}>
-					<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Pressable
-						style={[styles.button, styles.buttonClose]}
-						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
-							<Text style={styles.textStyle}>Route</Text>
-						</Pressable>
-						
-						<Pressable
-						onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-						style={[styles.buttons, {marginRight: 10}]}>
-							<Text>Report</Text>
-						</Pressable>
-						
-						<Pressable
-						onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
-						style={[styles.button, styles.buttonClose, styles.mbottom]}>
-							<Text style={styles.textStyle}>Favorite</Text>
-					</Pressable>
-					</View>
-					</View>
+				>
+					<TouchableOpacity
+						style={{flex:1}}
+						onPress={() => {
+							setModalVisible(false)
+						}
+					}>
+						<View style={styles.centeredView}>
+							<View style={styles.modalView}>
+								<Pressable
+								style={[styles.button, styles.buttonClose]}
+								onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+									<Text style={styles.textStyle}>Route</Text>
+								</Pressable>
+								
+								<Pressable
+								onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+								style={[styles.buttons, {marginRight: 10}]}>
+									<Text>Report</Text>
+								</Pressable>
+								
+								<Pressable
+								onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+								style={[styles.button, styles.buttonClose, styles.mbottom]}>
+									<Text style={styles.textStyle}>Favorite</Text>
+							</Pressable>
+							</View>
+						</View>
+					</TouchableOpacity>
 				</Modal>
 				
 			</View>
