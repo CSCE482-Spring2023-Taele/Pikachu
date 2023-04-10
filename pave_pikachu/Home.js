@@ -489,7 +489,7 @@ export default function HomeScreen({navigation, route}) {
 						</Pressable>
 
 						<Pressable
-						onPress={() => {setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+						onPress={() => {setModalVisible(!modalVisible), saveLocation(destinationCoord, token, mapboxToken)}}
 						style={[styles.button, styles.mbottom]}>
 							<Text style={styles.textStyle}>Save</Text>
 					</Pressable>

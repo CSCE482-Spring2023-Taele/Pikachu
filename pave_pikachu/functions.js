@@ -120,7 +120,7 @@ const saveLocation = async(coordinates, token, mapboxToken) => {
     const features = reverse.features[0]
     const longitude = features.geometry.coordinates[0]
     const latitude = features.geometry.coordinates[1]
-    
+    console.log("HEEHHEEHEHEHHEEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHE")
     console.log(mapboxToken, longitude, latitude)
 
     const data = {
