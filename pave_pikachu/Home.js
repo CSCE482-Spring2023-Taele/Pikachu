@@ -253,19 +253,19 @@ export default function HomeScreen({navigation, route}) {
 				setModalVisible(!modalVisible);
 				}}>
 				<View style={styles.centeredView}>
-				<View style={styles.modalView}>
-					<Text style={styles.modalText}>Hello World!</Text>
-					<Pressable
-					style={[styles.button, styles.buttonClose]}
-					onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
-					<Text style={styles.textStyle}>Route</Text>
-					</Pressable>
-					<Pressable
-					onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-					style={[styles.buttons, {marginRight: 10}]}>
-						<Text>Report</Text>
-					</Pressable>
-				</View>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Pressable
+                            style={[styles.button, ]}
+                            onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+                            <Text style={styles.textStyle}>Route</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.buttons, {marginRight: 10}]}
+                            onPress={() => {navigation.navigate('Settings', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}>
+                            <Text>Report</Text>
+                        </Pressable>
+                    </View>
 				</View>
 			</Modal>
 			
@@ -299,6 +299,7 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
+        backgroundColor: "#d6e0cb";
 	  },
 	  buttonOpen: {
 		backgroundColor: '#F194FF',
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	obstruction: {
-		backgroundColor: 'red',
+		backgroundColor: '#c44601',
 		height: 10,
 		justifyContent: 'center',
 		width: 10,

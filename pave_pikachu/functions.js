@@ -93,8 +93,8 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
         .catch(function(err) {
             console.log("ERROR", err);
         });
-    return resData;
-}
-
+        return resData;
+    }
+    
 export {attemptLogin, attemptRegister, attemptReport};
 
