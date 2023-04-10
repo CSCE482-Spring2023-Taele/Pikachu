@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	lineLayer: {
-		lineColor: 'green',
+		lineColor: '#0073E6',
 		lineCap: 'round',
 		lineJoin: 'round',
 		lineWidth: 10
