@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
-        backgroundColor: "#d6e0cb";
+        backgroundColor: "#d6e0cb",
 	  },
 	  mbottom: {
 		marginBottom: 3,
