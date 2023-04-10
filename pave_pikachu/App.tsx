@@ -41,8 +41,10 @@ import RegisterSuccessScreen from './RegisterSuccess.js';
 const Tab = createBottomTabNavigator();
 
 function MyTabs({navigation, route}) {
-  const temp = route.params.token;
-  const temp2 = route.params.user;
+//   const temp = route.params.token;
+  const temp = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0";
+  const temp2 = "potato";
+//   const temp2 = route.params.user;
 
   return (
     <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
@@ -72,7 +74,7 @@ const Stack = createStackNavigator();
 const App = () => {
 	return (
 		<NavigationContainer>
-		  <Stack.Navigator initialRouteName={'Login'} screenOptions={{headerShown: false}}>
+		  <Stack.Navigator initialRouteName={'Tabs'} screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={HomeScreen} />
 			<Stack.Screen name="Tabs" component={MyTabs} />
 			<Stack.Screen name="Report" component={ReportScreen} />
