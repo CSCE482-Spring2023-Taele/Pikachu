@@ -20,13 +20,12 @@ const attemptLogin = async (userinfo) => {
             return result;
         })
         .then(async(promise) => {
-            console.log(promise)
+            
             return promise;
         })
         .catch(function(err) {
             console.log("ERROR", err);
         });
-        console.log(resData)
     return resData;
 }
 
@@ -75,19 +74,13 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
     let initObject = {
         method: 'POST', headers: reqHeader, body: JSON.stringify(data)
     };
-    console.log("lat:" + latitude);
-    console.log("long: " + longitude);
-    console.log("token: " + token);
-
     const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
     let resData = await fetch(url + "/report", initObject)
         .then(response => {
             let result = response.json();
-            console.log("here2");
             return result;
         })
         .then(async(promise) => {
-            console.log("here3");
             return promise;
         })
         .catch(function(err) {
@@ -122,10 +115,17 @@ const reverseGeocodingAPI = async(longitude, latitude, mapboxToken) => {
     return resData;
 }
 
-const saveLocation = async(coordinates, token) => {
+const saveLocation = async(coordinates, token, mapboxToken) => {
+    const reverse = await reverseGeocodingAPI(coordinates[0], coordinates[1], mapboxToken)
+    const features = reverse.features[0]
+    const longitude = features.geometry.coordinates[0]
+    const latitude = features.geometry.coordinates[1]
+    
+    console.log(mapboxToken, longitude, latitude)
+
     const data = {
-        longitude: coordinates[0],
-        latitude: coordinates[1],
+        longitude: longitude,
+        latitude: latitude,
     };
 
     let reqHeader = new Headers();
@@ -140,17 +140,15 @@ const saveLocation = async(coordinates, token) => {
     let resData = await fetch(url + "/save-location", initObject)
         .then(response => {
             let result = response.json();
-            console.log("here2");
             return result;
         })
         .then(async(promise) => {
-            console.log("here3");
             return promise;
         })
         .catch(function(err) {
             console.log("ERROR", err);
         });
-    console.log(resData)
+    
 }
 
 const getSavedLocations = async(token) => {

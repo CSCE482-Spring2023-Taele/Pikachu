@@ -28,7 +28,6 @@ import {
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import { GetObstructions, GetPath } from './path';
-import SearchBar from './SearchBar';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -118,7 +117,6 @@ export default function HomeScreen({navigation, route}) {
 		//Will give you the location on location change
 		
 		setLocationStatus('You are Here');
-		console.log(position);
 
 		//getting the Longitude from the location json        
 		const currentLongitude = position.coords.longitude;
@@ -199,7 +197,6 @@ export default function HomeScreen({navigation, route}) {
 		console.log("destination coord: ", destinationCoord);
         //navigation.navigate("Menu", {lat: feature.geometry.coordinates[0], long: feature.geometry.coordinates[1], token: token});
 		setModalVisible(true)
-		console.log(modalVisible)
 	}
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -292,10 +289,8 @@ export default function HomeScreen({navigation, route}) {
 			
 			for (location of databaseSavedLocations) {
 				const response = await reverseGeocodingAPI(location.longitude, location.latitude, mapboxToken);
-				console.log("features:",response.features[0])
 				tempArray.push(response.features[0])
 			}
-			console.log("REVERSE GEO",tempArray)
 			setSavedLocationData(tempArray)
 		}
 		fetchData().catch(console.error);
@@ -324,7 +319,6 @@ export default function HomeScreen({navigation, route}) {
 	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
 
 
-	console.log(mapVisible, savedLocationListVisible, listVisible)
 	return (
 
 		<View style={styles.page}>
@@ -485,7 +479,7 @@ export default function HomeScreen({navigation, route}) {
 						</Pressable>
 
 						<Pressable
-						onPress={() => {navigation.navigate('Profile', {token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+						onPress={() => {navigation.navigate('Profile', {token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token, mapboxToken)}}
 						style={[styles.button, styles.mbottom]}>
 							<Text style={styles.textStyle}>Favorite</Text>
 					</Pressable>
