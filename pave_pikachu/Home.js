@@ -320,11 +320,11 @@ export default function HomeScreen({navigation, route}) {
 	}
 
 	const [showObstructionDescription, setShowObstructionDescription] = useState(false);
-	const [obstructionDescription, setObstructionDescription] = useState({"type": "", "description": ""});
+	const [obstructionDescription, setObstructionDescription] = useState({"description": ""});
 	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
 
 	useEffect(() => {
-		console.log("obstructionDescription", obstructionDescription["type"])
+		console.log("obstructionDescription", obstructionDescription)
 	}, [showObstructionDescription, obstructionDescription])
 
 
@@ -446,6 +446,9 @@ export default function HomeScreen({navigation, route}) {
 										onSelected={() => {
 											setObstructionDescription((obstruction));
 											setShowObstructionDescription(true);
+										}}
+										onDeselected={() => {
+											console.log("DESELECTED");
 										}} >
 										<View style={styles.obstruction}>
 										</View>
@@ -461,7 +464,6 @@ export default function HomeScreen({navigation, route}) {
 				visible={showObstructionDescription}>
 					<View style={styles.centeredView}>
 					<View style={styles.modalView}>
-						<Text>{obstructionDescription["type"]}</Text>
 						<Text>{obstructionDescription["description"]}</Text>
 						<Pressable style={[styles.button, styles.buttonClose]} onPress={handleShowObstructionDescription}>
 							<Text>
