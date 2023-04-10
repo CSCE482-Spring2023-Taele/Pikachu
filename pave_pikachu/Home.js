@@ -320,7 +320,7 @@ export default function HomeScreen({navigation, route}) {
 	}
 
 	const [showObstructionDescription, setShowObstructionDescription] = useState(false);
-	const [obstructionDescription, setObstructionDescription] = useState(false);
+	const [obstructionDescription, setObstructionDescription] = useState({});
 	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
 
 
