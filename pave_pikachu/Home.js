@@ -319,6 +319,11 @@ export default function HomeScreen({navigation, route}) {
 		}
 	}
 
+	const [showObstructionDescription, setShowObstructionDescription] = useState(false);
+	const [obstructionDescription, setObstructionDescription] = useState(false);
+	const handleShowObstructionDescription = () => setShowObstructionDescription(() => !showObstructionDescription);
+
+
 	console.log(mapVisible, savedLocationListVisible, listVisible)
 	return (
 
@@ -391,11 +396,20 @@ export default function HomeScreen({navigation, route}) {
 						onPress={getSpot}
 						visible={true}
 					>
+					{
+						modalVisible &&
+						<MapLibreGL.PointAnnotation
+							key={"user-marker"}
+							id={"user-marker"}
+							coordinate={[parseFloat(destinationCoord[0]),parseFloat(destinationCoord[1])]}
+							anchor={{x: 0, y: 0}} >
+							<View style={styles.obstruction}>
+							</View>
+						</MapLibreGL.PointAnnotation>
+					}
 						<MapLibreGL.Camera
 							zoomLevel={16}
 							centerCoordinate={[currentLongitude, currentLatitude]}
-							
-							
 						/>
 						<MapLibreGL.UserLocation
 							visible={true}
@@ -424,26 +438,31 @@ export default function HomeScreen({navigation, route}) {
 										key={`obstruction-${obstruction.idObstructions}`}
 										id={`obstruction-${obstruction.idObstructions}`}
 										coordinate={[parseFloat(obstruction.latitude),parseFloat(obstruction.longitude)]}
-										anchor={{x: 0, y: 0}} >
+										anchor={{x: 0, y: 0}}
+										onSelected={() => {
+											setObstructionDescription(obstruction);
+											setShowObstructionDescription(true);
+										}} >
 										<View style={styles.obstruction}>
 										</View>
 									</MapLibreGL.PointAnnotation>
 								)
 							})
 						}
-						{/* <MapLibreGL.PointAnnotation
-							key={"square-start"}
-							id={"square-start"}
-							coordinate={[-96.34156349159862,30.617461341278755]}
-							anchor={{x: 0, y: 0}} >
-							<View style={styles.test}>
-								<Text>hello</Text>
-							</View>
-						</MapLibreGL.PointAnnotation> */}
-
 					</MapLibreGL.MapView>
 				</View>
 				
+				{
+					showObstructionDescription &&
+					<Modal>
+						<View style={{ flex: 1 }}>
+							<Text>{obstructionDescription}</Text>
+							<Text>{obstructionDescription.type}</Text>
+							<Text>{obstructionDescription.description}</Text>
+							<Button title="Hide Modal" onPress={handleShowObstructionDescription} />
+						</View>
+					</Modal>
+				}
 
 				<Modal
 					animationType="slide"
