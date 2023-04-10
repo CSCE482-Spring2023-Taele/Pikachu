@@ -43,7 +43,7 @@ export default function LoginScreen({navigation}) {
         const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
             console.log("token: " + response.token);
-            navigation.navigate("Tabs", {token: response.token});
+            navigation.navigate("Tabs", {token: response.token, user: userInfo.user});
         }
         
         } catch (error) {
@@ -76,7 +76,7 @@ export default function LoginScreen({navigation}) {
         // found user signed in and now we redirect
         const response = await attemptLogin(userInfo);
         if(response.message === "user logged in") {
-            navigation.navigate("Tabs", {token: response.token});
+            navigation.navigate("Tabs", {token: response.token, user: userInfo.user});
         }
         } catch (error) {
         if (error.code === statusCodes.SIGN_IN_REQUIRED) {

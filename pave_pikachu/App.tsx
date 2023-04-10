@@ -42,10 +42,11 @@ const Tab = createBottomTabNavigator();
 
 function MyTabs({navigation, route}) {
   const temp = route.params.token;
+  const temp2 = route.params.user;
 
   return (
     <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
-      <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp}} options={{
+      <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp, user: temp2}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
@@ -54,7 +55,7 @@ function MyTabs({navigation, route}) {
             tabBarShowLabel: false,
             }}/>
 
-      <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{token: temp}} options={{
+      <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{token: temp, user: temp2}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
