@@ -28,7 +28,6 @@ import {
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { useEffect, useState } from 'react';
 import { GetObstructions, GetPath } from './path';
-import SearchBar from './SearchBar';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -118,7 +117,6 @@ export default function HomeScreen({navigation, route}) {
 		//Will give you the location on location change
 		
 		setLocationStatus('You are Here');
-		console.log(position);
 
 		//getting the Longitude from the location json        
 		const currentLongitude = position.coords.longitude;
@@ -199,7 +197,6 @@ export default function HomeScreen({navigation, route}) {
 		console.log("destination coord: ", destinationCoord);
         //navigation.navigate("Menu", {lat: feature.geometry.coordinates[0], long: feature.geometry.coordinates[1], token: token});
 		setModalVisible(true)
-		console.log(modalVisible)
 	}
 
 	const [modalVisible, setModalVisible] = useState(false);
@@ -292,10 +289,8 @@ export default function HomeScreen({navigation, route}) {
 			
 			for (location of databaseSavedLocations) {
 				const response = await reverseGeocodingAPI(location.longitude, location.latitude, mapboxToken);
-				console.log("features:",response.features[0])
 				tempArray.push(response.features[0])
 			}
-			console.log("REVERSE GEO",tempArray)
 			setSavedLocationData(tempArray)
 		}
 		fetchData().catch(console.error);
@@ -328,7 +323,6 @@ export default function HomeScreen({navigation, route}) {
 	}, [showObstructionDescription, obstructionDescription])
 
 
-	console.log(mapVisible, savedLocationListVisible, listVisible)
 	return (
 
 		<View style={styles.page}>
@@ -449,6 +443,7 @@ export default function HomeScreen({navigation, route}) {
 										}}
 										onDeselected={() => {
 											console.log("DESELECTED");
+											setShowObstructionDescription(false);
 										}} >
 										<View style={styles.obstruction}>
 										</View>
@@ -459,48 +454,58 @@ export default function HomeScreen({navigation, route}) {
 					</MapLibreGL.MapView>
 				</View>
 				
-				<Modal animationType="slide"
-				transparent={true}
-				visible={showObstructionDescription}>
+				<Modal 
+					animationType="slide"
+					transparent={true}
+					visible={showObstructionDescription}
+				>
+					<TouchableOpacity
+						style={{flex:1}}
+						onPress={() => {
+							setShowObstructionDescription(false)
+						}
+					}>
 					<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Text>{obstructionDescription["description"]}</Text>
-						<Pressable style={[styles.button, styles.buttonClose]} onPress={handleShowObstructionDescription}>
-							<Text>
-								Hide Modal
-							</Text>
-						</Pressable>
+						<View style={styles.modalView}>
+							<Text>{obstructionDescription["description"]}</Text>
+						</View>
 					</View>
-					</View>
+					</TouchableOpacity>
 				</Modal>
 
 				<Modal
 					animationType="slide"
 					transparent={true}
 					visible={modalVisible}
-					onRequestClose={() => {
-					}}>
-					<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Pressable
-						onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}
-						style={[styles.button, styles.mbottom]}>
-							<Text style={styles.textStyle}>Route</Text>
-						</Pressable>
-						
-						<Pressable
-						onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
-						style={[styles.button, styles.mbottom]}>
-							<Text style={styles.textStyle}>Report</Text>
-						</Pressable>
-
-						<Pressable
-						onPress={() => {setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
-						style={[styles.button, styles.mbottom]}>
-							<Text style={styles.textStyle}>Save</Text>
-					</Pressable>
-					</View>
-					</View>
+				>
+					<TouchableOpacity
+						style={{flex:1}}
+						onPress={() => {
+							setModalVisible(false)
+						}
+					}>
+						<View style={styles.centeredView}>
+							<View style={styles.modalView}>
+								<Pressable
+								style={[styles.button, styles.buttonClose]}
+								onPress={() => {setSelected("route"); setModalVisible(!modalVisible)}}>
+									<Text style={styles.textStyle}>Route</Text>
+								</Pressable>
+								
+								<Pressable
+								onPress={() => {navigation.navigate('Report', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible)}}
+								style={[styles.buttons, {marginRight: 10}]}>
+									<Text>Report</Text>
+								</Pressable>
+								
+								<Pressable
+								onPress={() => {navigation.navigate('Profile', {lat: destinationCoord[0], long: destinationCoord[1], token: token}), setModalVisible(!modalVisible), saveLocation(destinationCoord, token)}}
+								style={[styles.button, styles.buttonClose, styles.mbottom]}>
+									<Text style={styles.textStyle}>Favorite</Text>
+							</Pressable>
+							</View>
+						</View>
+					</TouchableOpacity>
 				</Modal>
 				
 			</View>
@@ -596,7 +601,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	lineLayer: {
-		lineColor: 'green',
+		lineColor: '#0073E6',
 		lineCap: 'round',
 		lineJoin: 'round',
 		lineWidth: 10
