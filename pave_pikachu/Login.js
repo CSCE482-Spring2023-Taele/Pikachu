@@ -124,7 +124,7 @@ export default function LoginScreen({navigation}) {
                     /> :
                     
                     <TouchableOpacity onPress={signOut}>
-                    <Text>button</Text>
+                    {/* <Text>button</Text> */}
                     </TouchableOpacity>
                 }
                 </View>
