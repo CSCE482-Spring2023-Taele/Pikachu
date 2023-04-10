@@ -35,8 +35,6 @@ import ProfileScreen from './Profile.js';
 import LoginScreen from './Login.js';
 import RegisterScreen from './Register.js';
 import RegisterSuccessScreen from './RegisterSuccess.js';
-import MenuScreen from './Menu.js';
-import SearchScreen from './SearchBar.js';
 
 // MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
 
@@ -44,10 +42,11 @@ const Tab = createBottomTabNavigator();
 
 function MyTabs({navigation, route}) {
   const temp = route.params.token;
+  const temp2 = route.params.user;
 
   return (
-    <Tab.Navigator initialRouteName='Home' screenOptions={{tabBarHideOnKeyboard: true, headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
-      <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp}} options={{
+    <Tab.Navigator initialRouteName='Home' screenOptions={{headerShown: false, tabBarStyle: { backgroundColor: '#C8D5B9', borderTopWidth: 1, borderTopColor: '#EEF1EA',}}}>
+      <Tab.Screen name="Home" component={HomeScreen} initialParams={{token: temp, user: temp2}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
@@ -56,7 +55,7 @@ function MyTabs({navigation, route}) {
             tabBarShowLabel: false,
             }}/>
 
-      <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{token: temp}} options={{
+      <Tab.Screen name="Profile" component={ProfileScreen} initialParams={{token: temp, user: temp2}} options={{
             headerShown: false,
             tabBarIcon:  ({color}) => {
               return (
@@ -76,13 +75,11 @@ const App = () => {
 		  <Stack.Navigator initialRouteName={'Login'} screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={HomeScreen} />
 			<Stack.Screen name="Tabs" component={MyTabs} />
-			<Stack.Screen name="Settings" component={ReportScreen} />
+			<Stack.Screen name="Report" component={ReportScreen} />
 			<Stack.Screen name="Profile" component={ProfileScreen} />
 			<Stack.Screen name="Login" component={LoginScreen} />
 			<Stack.Screen name="Register" component={RegisterScreen} />
 			<Stack.Screen name="RegisterSuccess" component={RegisterSuccessScreen} />
-			<Stack.Screen name="Menu" component={MenuScreen} options={{gestureDirection: "vertical"}} />
-			<Stack.Screen name="Search" component={SearchScreen} />
 		  </Stack.Navigator>
 		</NavigationContainer>
 	  );

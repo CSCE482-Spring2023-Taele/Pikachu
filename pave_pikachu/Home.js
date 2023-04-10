@@ -516,6 +516,10 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
+        backgroundColor: "#d6e0cb",
+	  },
+	  mbottom: {
+		marginBottom: 3,
 	  },
 	  buttonOpen: {
 		backgroundColor: '#F194FF',
@@ -551,7 +555,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	obstruction: {
-		backgroundColor: 'red',
+		backgroundColor: '#c44601',
 		height: 10,
 		justifyContent: 'center',
 		width: 10,
