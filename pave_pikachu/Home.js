@@ -482,6 +482,7 @@ export default function HomeScreen({navigation, route}) {
 						style={{flex:1}}
 						onPress={() => {
 							setModalVisible(false)
+							setPath([]);
 						}
 					}>
 						<View style={styles.centeredView}>
