@@ -20,6 +20,8 @@ export default function ReportScreen({navigation, route}) {
     const long = route.params.long;
     const token = route.params.token;
 
+    console.log("report token: ",token)
+
     const [description, setDescription] = useState("");
     const [reportLocation, setReportLocation] = useState("");
 

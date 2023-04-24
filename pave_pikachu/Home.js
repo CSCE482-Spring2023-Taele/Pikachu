@@ -42,6 +42,7 @@ MapLibreGL.setAccessToken("pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2
 
 export default function HomeScreen({navigation, route}) {
 	const token = route.params.token;
+	console.log("my token ", token)
 
 	//const accessTokenPromise = MapLibreGL.getAccessToken().then((promise) => {return promise})
 	const mapboxToken = "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA"
@@ -294,7 +295,7 @@ export default function HomeScreen({navigation, route}) {
 			setSavedLocationData(tempArray)
 		}
 		fetchData().catch(console.error);
-	}, [mapVisible])
+	}, [savedLocationListVisible])
 
 	// make saved locations visible
 	function savedLocationStyle() {

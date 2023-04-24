@@ -1,3 +1,7 @@
+const dummy = (int) => {
+    return int + 1;
+}
+
 const attemptLogin = async (userinfo) => {
     const data = {
         email: userinfo.user.email,
@@ -235,5 +239,15 @@ const deleteAccount = async(token) => {
 
 
 
-export {attemptLogin, attemptRegister, attemptReport, geocodingAPI, reverseGeocodingAPI, saveLocation, getSavedLocations,  deleteSavedLocation, deleteAccount};
+export {
+    attemptLogin, 
+    attemptRegister, 
+    attemptReport, 
+    geocodingAPI, 
+    reverseGeocodingAPI, 
+    saveLocation, 
+    getSavedLocations, 
+    deleteSavedLocation, 
+    deleteAccount,
+    dummy};
 

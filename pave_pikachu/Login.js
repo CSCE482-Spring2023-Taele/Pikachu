@@ -72,10 +72,12 @@ export default function LoginScreen({navigation}) {
     const getCurrentUserInfo = async () => {
         try {
         const userInfo = await GoogleSignin.signInSilently();
-        setUser(userInfo);
+        
         // found user signed in and now we redirect
         const response = await attemptLogin(userInfo);
+        console.log(userInfo)
         if(response.message === "user logged in") {
+            console.log(response.token)
             navigation.navigate("Tabs", {token: response.token, user: userInfo.user});
         }
         } catch (error) {
@@ -85,6 +87,7 @@ export default function LoginScreen({navigation}) {
         } else {
             alert("Something went wrong. Unable to get user's info");
             console.log("Something went wrong. Unable to get user's info");
+            console.log(error)
         }
         }
     };
