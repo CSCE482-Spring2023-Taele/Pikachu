@@ -2,6 +2,8 @@ const dummy = (int) => {
     return int + 1;
 }
 
+import fetch from "node-fetch";
+
 const attemptLogin = async (userinfo) => {
     const data = {
         email: userinfo.user.email,
@@ -71,7 +73,7 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
         description: description
     } 
 
-    let reqHeader = new Headers();
+    let reqHeader = new fetch.Headers();
     reqHeader.append('Content-Type', 'application/json');
     reqHeader.append("Authorization", "Bearer " + token);
 
@@ -110,7 +112,7 @@ const geocodingAPI = async (search, mapboxToken, boundingBox) => {
 
 const reverseGeocodingAPI = async(longitude, latitude, mapboxToken) => {
     const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+longitude+","+latitude+".json?country=us&limit=1&access_token="+mapboxToken;
-    console.log(geoURL)
+    // console.log(geoURL)
     const response = await fetch(geoURL);
     
     let resData = await response.text()
