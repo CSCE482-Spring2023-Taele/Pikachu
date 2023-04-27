@@ -35,35 +35,7 @@ const attemptLogin = async (userinfo) => {
     return resData;
 }
 
-const attemptRegister = async (email, firstName, lastName) => {
-    const data = {
-        email: email,
-        first_name: firstName,
-        last_name: lastName,
-    } 
 
-    let reqHeader = new Headers();
-    reqHeader.append('Content-Type', 'application/json');
-
-    let initObject = {
-        method: 'POST', headers: reqHeader, body: JSON.stringify(data)
-    };
-
-    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
-
-    let resData = await fetch(url + "/signup", initObject)
-        .then(response => {
-            let result = response.json();
-            return result;
-        })
-        .then(async(promise) => {
-            return promise;
-        })
-        .catch(function(err) {
-            console.log("ERROR", err);
-        });
-    return resData;
-}
 
 const attemptReport = async (latitude, longitude, type, description, token) => {
     const data = {
@@ -126,15 +98,13 @@ const saveLocation = async(coordinates, token, mapboxToken) => {
     const features = reverse.features[0]
     const longitude = features.geometry.coordinates[0]
     const latitude = features.geometry.coordinates[1]
-    console.log("HEEHHEEHEHEHHEEHEHEHEHEHEHHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHE")
-    console.log(mapboxToken, longitude, latitude)
 
     const data = {
         longitude: longitude,
         latitude: latitude,
     };
 
-    let reqHeader = new Headers();
+    let reqHeader = new fetch.Headers();
     reqHeader.append('Content-Type', 'application/json');
     reqHeader.append("Authorization", "Bearer " + token);
 
@@ -191,8 +161,6 @@ const deleteSavedLocation = async(long, lat, token) => {
         latitude: lat,
     };
 
-    console.log("lat: " + lat);
-    console.log("long: " + long);
 
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/json');
@@ -242,8 +210,7 @@ const deleteAccount = async(token) => {
 
 
 export {
-    attemptLogin, 
-    attemptRegister, 
+    attemptLogin,  
     attemptReport, 
     geocodingAPI, 
     reverseGeocodingAPI, 
