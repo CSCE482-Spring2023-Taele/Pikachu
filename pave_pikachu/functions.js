@@ -1,7 +1,3 @@
-const dummy = (int) => {
-    return int + 1;
-}
-
 import fetch from "node-fetch";
 
 const attemptLogin = async (userinfo) => {
@@ -62,7 +58,7 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
     .catch(function(err) {
         console.log("ERROR", err);
     });
-    console.log("hello")
+    
     return resData;
 }
 
@@ -127,7 +123,7 @@ const saveLocation = async(coordinates, token, mapboxToken) => {
 }
 
 const getSavedLocations = async(token) => {
-    let reqHeader = new Headers();
+    let reqHeader = new fetch.Headers();
     reqHeader.append('Content-Type', 'application/json');
     reqHeader.append("Authorization", "Bearer " + token);
 
@@ -135,7 +131,8 @@ const getSavedLocations = async(token) => {
         method: 'GET', headers: reqHeader
     };
 
-    const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    //const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
+    const url = "http://localhost:5000"
     let response = await fetch(url + "/saved-locations", initObject)
         // .then(response => {
         //     let result = response.json();
@@ -217,5 +214,5 @@ export {
     getSavedLocations, 
     deleteSavedLocation, 
     deleteAccount,
-    dummy};
+    };
 

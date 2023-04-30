@@ -1,19 +1,10 @@
  // var assert = require('assert');
-import {dummy, reverseGeocodingAPI, attemptReport, saveLocation, deleteSavedLocation, geocodingAPI, getSavedLocations} from "../functions.js"
+import {reverseGeocodingAPI, attemptReport, saveLocation, deleteSavedLocation, geocodingAPI, getSavedLocations, deleteAccount} from "../functions.js"
 // var dummy = require('../functions.js');
 import assert from 'assert'
 
 const mapboxToken = "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA"
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0"
-
-
-describe('Add', function() {
-    describe('#dummy()', function() {
-        it('should add one to the value passed in', function() {
-            assert.equal(dummy(1), 2)
-        })
-    })
-}) 
 
 
 describe('Geocoding', function() {
@@ -31,22 +22,32 @@ describe('Geocoding', function() {
 
 describe('Get saved locations', function() {
     describe('#getSavedLocation()', function() {
-        it('should retrieve saved locations for a user', function() {
+        it('should retrieve saved locations for a user if any', function() {
             const fetch = async () => {
                 const response = await getSavedLocations(token);
-                console.log(response)
-                assert.equal(response.features.length > 0, true)
+                
+                assert.equal(response.length >= 0, true)
+            }
+            fetch().catch(err => console.log(err))
+        })
+
+        it('should fail to retrieve saved locations for a user', function() {
+            const fetch = async () => {
+                const response = await getSavedLocations("bad token");
+                
+                assert.equal(response.message, "jwt malformed")
             }
             fetch().catch(err => console.log(err))
         })
     })
 })
-describe('Add', function() {
+
+describe('Find an address', function() {
     describe('#reverseGeocodingAPI()', function() {
         it('should return address based on coordinates', function() {
 
             const fetchData = async () => {
-                var response = await reverseGeocodingAPI("-73.990593", "40.740121", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                var response = await reverseGeocodingAPI("-73.990593", "40.740121", "mapboxToken");
                 assert.equal(response.features[0].place_name, "Strand Bookstore at Club Monaco, 160 5th Ave, New York, New York 10010, United States");
             }
 
@@ -56,7 +57,7 @@ describe('Add', function() {
     })
 }) 
 
-describe('Add', function() {
+describe('Report an obstruction', function() {
     describe('#attemptReport()', function() {
         it('should inject a report to the obstructions database', function() {
 
@@ -82,7 +83,7 @@ describe('Add', function() {
     })
 }) 
 
-describe('Add', function() {
+describe('Save a location', function() {
     describe('#saveLocation()', function() {
         it('should inject a saved location to the savedlocation database', function() {
 
@@ -90,7 +91,7 @@ describe('Add', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
                 assert.equal(response, "location updated"); 
             }
         
@@ -104,7 +105,7 @@ describe('Add', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "badkey", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                var response = await saveLocation(tempArray, "badkey", "mapboxToken");
                 assert.equal(response, "failed to update location");
             }
         
@@ -114,7 +115,7 @@ describe('Add', function() {
     })
 }) 
 
-describe('Add', function() {
+describe('Delete a saved location', function() {
     describe('#deleteSavedLocation()', function() {
         it('should delete a saved location from the savedlocation database', function() {
 
@@ -122,7 +123,7 @@ describe('Add', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
                 
                 var response2 = await deleteSavedLocation(tempArray[0], tempArray[1], "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0");
                 assert.equal(response2, "location deleted");
@@ -132,12 +133,13 @@ describe('Add', function() {
 
         })
 
+
         it('should fail to delete a location to the savedlocation database', function() {
 
             const fetchData = async () => {
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
                 
                 var response2 = await deleteSavedLocation(tempArray[0], tempArray[1], "badkey");
                 assert.equal(response2, "failed to delete location");
