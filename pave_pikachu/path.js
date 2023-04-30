@@ -1,8 +1,9 @@
 import buffer from "@turf/buffer";
 import { point } from "@turf/helpers";
+import fetch from "node-fetch";
 
 const GetObstructions = async (token) => {
-	const reqHeader = new Headers();
+	const reqHeader = new fetch.Headers();
 	reqHeader.append("Authorization", "Bearer " + token);
 	reqHeader.append('Content-Type', 'application/json');
 	
@@ -42,7 +43,7 @@ const GetObstructions = async (token) => {
 const GetPath = async (startLat, startLong, 
 						endLat, endLong, polygons) => {
 	
-	const reqHeader = new Headers();
+	const reqHeader = new fetch.Headers();
 	reqHeader.append('Content-Type', 'application/json');
 	reqHeader.append('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
 	reqHeader.append("Authorization", "5b3ce3597851110001cf6248f834231758eb4b809ded56df20155e98");
