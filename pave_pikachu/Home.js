@@ -32,7 +32,7 @@ import { GetObstructions, GetPath } from './path';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Geolocation from '@react-native-community/geolocation'; // for location
-import { geocodingAPI, saveLocation, getSavedLocations, reverseGeocodingAPI } from './functions';
+import { geocodingAPI, saveLocation, getSavedLocations, reverseGeocodingAPI } from './functions.js';
 // import { KeyboardAvoidingView } from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 let deviceWidth = Dimensions.get('window').width;

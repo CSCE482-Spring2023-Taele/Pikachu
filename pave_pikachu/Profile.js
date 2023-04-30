@@ -14,7 +14,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 
 import { useIsFocused } from "@react-navigation/native";
 
-import { getSavedLocations, reverseGeocodingAPI, deleteSavedLocation, deleteAccount } from './functions';
+import { getSavedLocations, reverseGeocodingAPI, deleteSavedLocation, deleteAccount } from './functions.js';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;

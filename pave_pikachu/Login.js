@@ -15,7 +15,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 
 import {GoogleSignin, GoogleSigninButton, statusCodes} from '@react-native-community/google-signin';
 
-const logo = require('./assets/pave.png')
+import logo from './assets/pave.png'
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;

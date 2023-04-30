@@ -2,6 +2,8 @@ const dummy = (int) => {
     return int + 1;
 }
 
+import fetch from "node-fetch";
+
 const attemptLogin = async (userinfo) => {
     const data = {
         email: userinfo.user.email,
@@ -39,16 +41,16 @@ const attemptRegister = async (email, firstName, lastName) => {
         first_name: firstName,
         last_name: lastName,
     } 
-
+    
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/json');
-
+    
     let initObject = {
         method: 'POST', headers: reqHeader, body: JSON.stringify(data)
     };
 
     const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
-
+    
     let resData = await fetch(url + "/signup", initObject)
         .then(response => {
             let result = response.json();
@@ -60,7 +62,7 @@ const attemptRegister = async (email, firstName, lastName) => {
         .catch(function(err) {
             console.log("ERROR", err);
         });
-    return resData;
+        return resData;
 }
 
 const attemptReport = async (latitude, longitude, type, description, token) => {
@@ -70,26 +72,27 @@ const attemptReport = async (latitude, longitude, type, description, token) => {
         type: type,
         description: description
     } 
-
-    let reqHeader = new Headers();
+    
+    let reqHeader = new fetch.Headers();
     reqHeader.append('Content-Type', 'application/json');
     reqHeader.append("Authorization", "Bearer " + token);
-
+    
     let initObject = {
         method: 'POST', headers: reqHeader, body: JSON.stringify(data)
     };
     const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
     let resData = await fetch(url + "/report", initObject)
-        .then(response => {
-            let result = response.json();
-            return result;
-        })
-        .then(async(promise) => {
-            return promise;
-        })
-        .catch(function(err) {
-            console.log("ERROR", err);
-        });
+    .then(response => {
+        let result = response.json();
+        return result;
+    })
+    .then(async(promise) => {
+        return promise;
+    })
+    .catch(function(err) {
+        console.log("ERROR", err);
+    });
+    console.log("hello")
     return resData;
 }
 
@@ -99,7 +102,7 @@ const geocodingAPI = async (search, mapboxToken, boundingBox) => {
     const bb = "-180%2C-90%2C180%2C90" //example
     //const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + address + ".json?country=us&bbox="+ bb +"&language=en&access_token="+mapboxToken;
     const geoURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + address + ".json?country=us&language=en&access_token="+mapboxToken;
-    console.log(geoURL)
+    //console.log(geoURL)
     const response = await fetch(geoURL);
     
     let resData = await response.text()
