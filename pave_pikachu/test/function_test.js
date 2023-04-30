@@ -80,6 +80,7 @@ describe('Report an obstruction', function() {
             fetchData();
 
         })
+
     })
 }) 
 
@@ -123,8 +124,10 @@ describe('Delete a saved location', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
-                
+                console.log("here2");
+                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
+                console.log("here");
+                console.log("response" + response.message);
                 var response2 = await deleteSavedLocation(tempArray[0], tempArray[1], "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0");
                 assert.equal(response2, "location deleted");
             }
@@ -137,11 +140,12 @@ describe('Delete a saved location', function() {
         it('should fail to delete a location to the savedlocation database', function() {
 
             const fetchData = async () => {
-                tempArray.push("-73.990593");
-                tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
+                let tempArray1 = []
+                tempArray1.push("-73.990593");
+                tempArray1.push("40.740121");
+                var response = await saveLocation(tempArray1, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
                 
-                var response2 = await deleteSavedLocation(tempArray[0], tempArray[1], "badkey");
+                var response2 = await deleteSavedLocation(tempArray1[0], tempArray1[1], "badkey");
                 assert.equal(response2, "failed to delete location");
             }
         
