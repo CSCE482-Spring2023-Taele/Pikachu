@@ -92,7 +92,7 @@ describe('Save a location', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "mapboxToken");
+                var response = await saveLocation(tempArray, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsImlhdCI6MTY4MDY2OTU2N30.xWbBNDIS1dpaPujh6id2AyJ-x2ySHWJsyxLVx2f5eF0", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
                 assert.equal(response, "location updated"); 
             }
         
@@ -106,7 +106,7 @@ describe('Save a location', function() {
                 let tempArray = []
                 tempArray.push("-73.990593");
                 tempArray.push("40.740121");
-                var response = await saveLocation(tempArray, "badkey", "mapboxToken");
+                var response = await saveLocation(tempArray, "badkey", "pk.eyJ1IjoicG90YXRvNzk3IiwiYSI6ImNsZmRmcnJnNzB3dXIzd2xkb3BmMmJldXIifQ.l7JlC4101MBrzt5cLCh2CA");
                 assert.equal(response, "failed to update location");
             }
         
