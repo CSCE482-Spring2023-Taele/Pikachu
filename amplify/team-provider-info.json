@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pave-dev-131557-authRole",
+      "UnauthRoleArn": "arn:aws:iam::386217839146:role/amplify-pave-dev-131557-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::386217839146:role/amplify-pave-dev-131557-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pave-dev-131557-deployment",
+      "UnauthRoleName": "amplify-pave-dev-131557-unauthRole",
+      "StackName": "amplify-pave-dev-131557",
+      "StackId": "arn:aws:cloudformation:us-east-1:386217839146:stack/amplify-pave-dev-131557/fe926e90-bac0-11ed-942f-0e5e8ed969bb",
+      "AmplifyAppId": "d1gshlw1yqqe6k"
+    },
+    "categories": {
+      "function": {
+        "PAVE": {
+          "deploymentBucketName": "amplify-pave-dev-131557-deployment",
+          "s3Key": "amplify-builds/PAVE-3847696a317743765a74-build.zip"
+        }
+      },
+      "api": {
+        "PAVEAPI": {}
+      }
+    }
+  }
+}

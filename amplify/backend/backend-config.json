@@ -1,0 +1,43 @@
+{
+  "api": {
+    "PAVEAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "PAVE"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "PAVE": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_PAVE_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PAVE"
+        }
+      ]
+    },
+    "AMPLIFY_function_PAVE_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PAVE"
+        }
+      ]
+    }
+  }
+}

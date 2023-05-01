@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "paths": {
+    "/PAVE": {
+      "name": "/PAVE",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/login": {
+      "name": "/login",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/deactivate": {
+      "name": "/deactivate",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/profile": {
+      "name": "/profile",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/saved-locations": {
+      "name": "/saved-locations",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/save-location": {
+      "name": "/save-location",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/remove-saved-location": {
+      "name": "/remove-saved-location",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/edit-profile": {
+      "name": "/edit-profile",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/obstructions": {
+      "name": "/obstructions",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/report": {
+      "name": "/report",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/remove-report": {
+      "name": "/remove-report",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/get-mapbox-token": {
+      "name": "/get-mapbox-token",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/all-obstructions": {
+      "name": "/all-obstructions",
+      "lambdaFunction": "PAVE",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
