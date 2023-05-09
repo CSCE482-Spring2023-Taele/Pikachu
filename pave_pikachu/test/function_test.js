@@ -1,5 +1,6 @@
  // var assert = require('assert');
-import {reverseGeocodingAPI, attemptReport, saveLocation, deleteSavedLocation, geocodingAPI, getSavedLocations, deleteAccount} from "../functions.js"
+import {reverseGeocodingAPI, attemptReport, saveLocation, deleteSavedLocation, geocodingAPI, getSavedLocations} from "../functions.js"
+import { GetObstructions, GetPath } from "../path.js"
 // var dummy = require('../functions.js');
 import assert from 'assert'
 
@@ -151,6 +152,42 @@ describe('Delete a saved location', function() {
         
             fetchData();
 
+        })
+    })
+})
+
+
+describe('Get all obstructions in database', function() {
+    describe('#GetObstructions', function() {
+        it('should retrieve all obstructions from the database', function() {
+
+            const fetchData = async () => {
+                response = GetObstructions(token)
+                assert.equal(response, true)
+            }
+
+            fetchData();
+        })
+    })
+})
+
+describe('Get a path from point A to point B', function() {
+    describe('#GetPath', function() {
+        it('should return a JSON object containing instructions for a path while avoiding obstructions', function() {
+
+            const fetchData = async () => {
+                let polygons;
+                GetObstructions(token)
+                .then(resp => {
+                    polygons = resp.polygons
+                })
+                .catch(err => console.log(err));
+
+                response = GetPath(8.681495, 49.41461, 8.687872, 49.420318, polygons)
+                assert.equal(response, true)
+            }
+
+            fetchData();
         })
     })
 })

@@ -173,18 +173,6 @@ const getSavedLocations = async(token) => {
     const url = "https://b03x6lkzlb.execute-api.us-east-1.amazonaws.com/dev";
     // const url = "http://localhost:5000"
     let response = await fetch(url + "/saved-locations", initObject)
-        // .then(response => {
-        //     let result = response.json();
-        //     console.log("here2");
-        //     return result;
-        // })
-        // .then(async(promise) => {
-        //     console.log("here3");
-        //     return promise;
-        // })
-        // .catch(function(err) {
-        //     console.log("ERROR", err);
-        // });
     let resData = await response.text()
     resData = JSON.parse(resData)
     return resData
